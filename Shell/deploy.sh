@@ -5,7 +5,7 @@ set +x && test "$debug" = true && set -x ;
 pwd=$( dirname $( readlink -f $0 ) ) ;
 
 test -z "$stack" && echo PLEASE DEFINE THE VALUE FOR stack && exit 1 ;
-test -z "$deploy" && deploy=latest ;
+test -z "$deploy" && echo PLEASE DEFINE THE TYPE OF DEPLOYMENT: LATEST/RELEASE && exit 1 ; 
 
 git clone https://github.com/secobau/docker.git ;
 source docker/AWS/common/functions.sh ;

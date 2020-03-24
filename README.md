@@ -9,6 +9,10 @@ aws acm list-certificates --output text ;
 # NAME OF THE STACK CREATED WITH CLOUDFORMATION
 stack=proxy2aws ;
 
+# DEFINE THE TYPE OF DEPLOYMENT: LATEST OR RELEASE
+deploy=latest ;
+deploy=release ;
+
 # TO CREATE THE SWARM
 export stack=$stack                                     \
   && git clone https://github.com/secobau/docker.git    \
