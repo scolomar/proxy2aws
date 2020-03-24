@@ -1,6 +1,6 @@
-* https://raw.githubusercontent.com/secobau/proxy2aws/master/YAML/cloudformation.yml
-* https://raw.githubusercontent.com/secobau/proxy2aws/master/YAML/cloudformation-https.yml
-* https://raw.githubusercontent.com/secobau/proxy2aws/master/YAML/cloudformation-http-https.yml
+* https://raw.githubusercontent.com/secobau/proxy2aws/master/YAML/AWS/cloudformation.yml
+* https://raw.githubusercontent.com/secobau/proxy2aws/master/YAML/AWS/cloudformation-https.yml
+* https://raw.githubusercontent.com/secobau/proxy2aws/master/YAML/AWS/cloudformation-http-https.yml
 
 ```bash
 # IN CASE YOU NEED HTTPS TO ACCESS YOUR APP

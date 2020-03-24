@@ -5,6 +5,7 @@ set +x && test "$debug" = true && set -x ;
 pwd=$( dirname $( readlink -f $0 ) ) ;
 
 test -z "$stack" && echo PLEASE DEFINE THE VALUE FOR stack && exit 1 ;
+test -z "$deploy" && deploy=latest ;
 
 git clone https://github.com/secobau/docker.git ;
 source docker/AWS/common/functions.sh ;
@@ -22,13 +23,13 @@ for target in $targets ; do
  send_command "$command" "$target" "$stack" ;
 done ;
 
-command=" sudo docker stack deploy --compose-file proxy2aws/YAML/aws2cloud.yml aws2cloud " ;
+command=" sudo docker stack deploy --compose-file proxy2aws/YAML/$deploy/aws2cloud.yml aws2cloud " ;
 targets=" InstanceManager1 " ;
 for target in $targets ; do
  send_command "$command" "$target" "$stack" ;
 done ;
 
-command=" sudo docker stack deploy --compose-file proxy2aws/YAML/aws2prem.yml aws2prem " ;
+command=" sudo docker stack deploy --compose-file proxy2aws/YAML/$deploy/aws2prem.yml aws2prem " ;
 targets=" InstanceManager1 " ;
 for target in $targets ; do
  send_command "$command" "$target" "$stack" ;

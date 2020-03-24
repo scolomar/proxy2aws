@@ -1,0 +1,23 @@
+version: '3.7'
+services:
+ aws2prem:
+  image: secobau/proxy2aws:release-1.0
+  ports:
+   - "8080:80"
+  volumes:
+   - aws2prem:/var/log/nginx
+  configs:
+   - source: aws2prem
+     target: /etc/nginx/conf.d/nginx.conf
+  deploy:
+   replicas: 3
+   restart_policy:
+    condition: any
+   placement:
+    constraints:
+     - node.role == worker
+volumes:
+ aws2prem:
+configs:
+ aws2prem:
+  file: /configs/aws2prem.conf
