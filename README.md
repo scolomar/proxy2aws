@@ -4,7 +4,7 @@ The connection between the proxy and the services is done through HTTPS with Bas
 
 The proxy service is deployed in AWS on a production-grade highly available and secure infrastructure consisting of private and public subnets, NAT gateways, security groups and application load balancers in order to ensure the isolation and resilience of the different components.
 
-Before creating the infrastructure you will need a Hosted Zone in AWS Route53.
+Before creating the infrastructure you will need a Hosted Zone in AWS Route53:
 
 ```bash
 
@@ -13,7 +13,7 @@ aws route53 list-hosted-zones --output text ;
 
 ```
 
-In case you want to use HTTPS then you will also need a previously provisioned AWS Certificate.
+In case you want to use HTTPS then you will also need a previously provisioned AWS Certificate:
 
 ```bash
 
