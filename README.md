@@ -83,7 +83,7 @@ export stack=$stack                                     \
 
 ```
 
-The services will be available in the following URLs:
+The services will be available at the following URLs:
 * https://aws2cloud.domain.com
 * https://aws2prem.domain.com
 
