@@ -6,17 +6,23 @@ The proxy service is deployed in AWS on a production-grade highly available and 
 
 Before creating the infrastructure you will need a Hosted Zone in AWS Route53.
 
-In case you want to use HTTPS then you will also need a previously provisioned AWS Certificate.
-
 ```bash
+
 # TO LIST THE EXISTING HOSTED ZONES
 aws route53 list-hosted-zones --output text ;
 
-# TO LIST THE EXISTING CERTIFICATES IN CASE YOU NEED HTTPS
-aws acm list-certificates --output text ;
 ```
 
-We will create 6 EC2 machines with Docker-CE installed spread on 3 different Availability Zones, 3 Private and Public Subnets, 3 NAT Gateways, 2 Security Groups, 2 Application Load Balancers and the necessary Routes, Roles and attachments to ensure the isolation of the EC2 machines and the security and resilience of the whole infrastructure.
+In case you want to use HTTPS then you will also need a previously provisioned AWS Certificate.
+
+```bash
+
+# TO LIST THE EXISTING CERTIFICATES IN CASE YOU NEED HTTPS
+aws acm list-certificates --output text ;
+
+```
+
+The template will create 6 EC2 machines spread on 3 different Availability Zones with Docker-CE installed, 3 Private and Public Subnets, 3 NAT Gateways, 2 Security Groups, 2 Application Load Balancers and the necessary Routes, Roles and attachments to ensure the isolation of the EC2 machines and the security and resilience of the whole infrastructure.
 
 The EC2 machines do not have any open port accessible from outside.
 
@@ -26,11 +32,7 @@ Here follow the links to the CloudFormation templates that define the infrastruc
 * https://raw.githubusercontent.com/secobau/proxy2aws/master/YAML/AWS/cloudformation-http.yml
 * https://raw.githubusercontent.com/secobau/proxy2aws/master/YAML/AWS/cloudformation-https.yml
 
-After you have successfully deployed the infrastructure in AWS you will create a Cloud9 instance to deploy a highly available Docker Swarm cluster consisting of three managers and three workers spread on three different Availability Zones. 
-
-The script will use AWS Systems Manager to send commands to the EC2 machines. 
-
-No bastions or open ports are needed. The EC2 machines are fully isolated.
+After you have successfully deployed the infrastructure in AWS you will create a Cloud9 instance to deploy a Highly Available Docker Swarm cluster consisting of three managers and three workers spread on three different Availability Zones. 
 
 ```BASH
 
@@ -94,7 +96,7 @@ export stack=$stack                                     \
 
 ```
 
-You can optionally remove the AWS infrastructure created in CloudFormation to avoid extra charges:
+You can optionally remove the AWS infrastructure created in CloudFormation otherwise you might be charged for any created object:
 
 ```BASH
 
