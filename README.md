@@ -83,6 +83,10 @@ export stack=$stack                                     \
 
 ```
 
+The services will be available in the following URLs:
+* https://aws2cloud.domain.com
+* https://aws2prem.domain.com
+
 Once you are finished you can remove the containers with the following script:
 
 ```BASH
