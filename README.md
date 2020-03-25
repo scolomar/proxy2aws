@@ -66,7 +66,7 @@ export stack=$stack                                     \
 Now you will deploy the application. The Docker images are hosted in Docker Hub:
 * https://hub.docker.com/r/secobau/proxy2aws
 
-The deployment can use the latest image for Continous Integration or the specified release for Continuos Delivery. You will have to choose between the two. Depending on your choice the script will use the appropriate docker-compose file.
+The deployment can use the latest image for Continous Integration or the specified release for Continuous Delivery. You will have to choose between the two. Depending on your choice the script will use the appropriate docker-compose file.
 
 ```BASH
 
