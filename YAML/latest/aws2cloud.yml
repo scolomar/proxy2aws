@@ -49,3 +49,6 @@ secrets:
   file: /secrets/etc/nginx/aws2cloud.htpasswd
  cloud2instance:
   file: /secrets/etc/nginx/conf.d/cloud2instance.conf
+  
+  
+  
