@@ -12,7 +12,7 @@ services:
      mode: 0440
   secrets:
    - source: aws2cloud
-     target: aws2cloud.htpasswd
+     target: etc/nginx/aws2cloud.htpasswd
      mode: 0440
      uid: '101'
      gid: '101'
@@ -27,10 +27,6 @@ services:
   image: "secobau/proxy2aws:latest"
   volumes:
    - cloud2instance:/var/log/nginx
-  configs:
-   - source: aws2cloud
-     target: /etc/nginx/conf.d/aws2cloud.conf
-     mode: 0440
   secrets:
    - source: cloud2instance
      target: etc/nginx/conf.d/cloud2instance.conf
@@ -47,9 +43,9 @@ volumes:
  cloud2instance:
 configs:
  aws2cloud:
-  file: /configs/aws2cloud.conf
+  file: /configs/etc/nginx/conf.d/aws2cloud.conf
 secrets:
  aws2cloud:
-  file: /secrets/aws2cloud.htpasswd
+  file: /secrets/etc/nginx/aws2cloud.htpasswd
  cloud2instance:
-  file: /secrets/cloud2instance.conf
+  file: /secrets/etc/nginx/conf.d/cloud2instance.conf
