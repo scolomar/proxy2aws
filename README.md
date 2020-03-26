@@ -83,6 +83,19 @@ export stack=$stack                                     \
 
 ```
 
+After the deployment is finished it is a good idea to remove the Docker Configs and Secrets from the disk of the Manager:
+
+```BASH
+
+# TO REMOVE THE CONFIGS AND SECRETS FROM DISK
+export stack=$stack                                     \
+  && git clone https://github.com/secobau/proxy2aws.git \
+  && chmod +x proxy2aws/Shell/remove-config.sh          \
+  && ./proxy2aws/Shell/remove-config.sh ;               \
+  rm -rf proxy2aws ;
+
+```
+
 The services will be available at the following URLs:
 * https://aws2cloud.domain.com
 * https://aws2prem.domain.com
