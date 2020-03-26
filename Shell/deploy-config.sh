@@ -22,22 +22,14 @@ for target in $targets ; do
  send_command "$command" "$target" "$stack" ;
 done ;
 
-command=" sudo mkdir /configs " ;
-targets=" InstanceManager1 " ;
-for target in $targets ; do
- send_command "$command" "$target" "$stack" ;
-done ;
-
-command=" sudo cp proxy2aws/configs/aws2cloud.conf /configs " ;
-targets=" InstanceManager1 " ;
-for target in $targets ; do
- send_command "$command" "$target" "$stack" ;
-done ;
-
-command=" sudo cp proxy2aws/configs/aws2prem.conf /configs " ;
-targets=" InstanceManager1 " ;
-for target in $targets ; do
- send_command "$command" "$target" "$stack" ;
+folders=" configs secrets " ;
+for folder in $folders ;
+do
+ command=" sudo cp --recursive --verbose proxy2aws/$folder / ; " ;
+ targets=" InstanceManager1 " ;
+ for target in $targets ; do
+  send_command "$command" "$target" "$stack" ;
+ done ;
 done ;
 
 command=" sudo rm --recursive --force proxy2aws " ;
