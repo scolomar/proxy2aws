@@ -41,9 +41,3 @@ for target in $targets ; do
  send_command "$command" "$target" "$stack" ;
 done ;
 
-command=" sudo rm --recursive --force /configs /secrets " ;
-targets=" InstanceManager1 " ;
-for target in $targets ; do
- send_command "$command" "$target" "$stack" ;
-done ;
-
