@@ -6,9 +6,10 @@ services:
    - "8080:80"
   volumes:
    - aws2prem:/var/log/nginx
-  configs:
+  secrets:
    - source: aws2prem
-     target: /etc/nginx/conf.d/nginx.conf
+     target: etc/nginx/conf.d/aws2prem.conf
+     mode: 0440
   deploy:
    replicas: 3
    restart_policy:
@@ -18,6 +19,6 @@ services:
      - node.role == worker
 volumes:
  aws2prem:
-configs:
+secrets:
  aws2prem:
-  file: /configs/aws2prem.conf
+  file: /secrets/etc/nginx/conf.d/aws2prem.conf
