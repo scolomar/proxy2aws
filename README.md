@@ -76,11 +76,12 @@ deploy=release ;
 
 # TO DEPLOY THE APP
 export stack=$stack                                     \
-  && export deploy=$deploy ;                            \
+  && export deploy=$deploy                              \
   && git clone https://github.com/secobau/proxy2aws.git \
   && chmod +x proxy2aws/Shell/deploy.sh                 \
   && ./proxy2aws/Shell/deploy.sh ;                      \
   rm -rf proxy2aws ;
+
 
 ```
 
@@ -94,6 +95,7 @@ export stack=$stack                                     \
   && chmod +x proxy2aws/Shell/remove-config.sh          \
   && ./proxy2aws/Shell/remove-config.sh ;               \
   rm -rf proxy2aws ;
+
 
 ```
 
@@ -111,6 +113,7 @@ export stack=$stack                                     \
   && chmod +x proxy2aws/Shell/remove.sh                 \
   && ./proxy2aws/Shell/remove.sh ;                      \
   rm -rf proxy2aws ;
+
 
 ```
 
