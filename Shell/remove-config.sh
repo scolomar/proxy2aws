@@ -10,38 +10,13 @@ git clone https://github.com/secobau/docker.git ;
 source docker/AWS/common/functions.sh ;
 rm --recursive --force docker ;
 
-command=" git clone https://github.com/secobau/proxy2aws.git proxy2aws " ;
-targets=" InstanceManager1 " ;
-for target in $targets ; do
- send_command "$command" "$target" "$stack" ;
+folders=" configs secrets " ;
+for folder in $folders ;
+do
+ command=" sudo rm --recursive --force /$folder ; " ;
+ targets=" InstanceManager1 " ;
+ for target in $targets ; do
+  send_command "$command" "$target" "$stack" ;
+ done ;
 done ;
 
-command=" find proxy2aws " ;
-targets=" InstanceManager1 " ;
-for target in $targets ; do
- send_command "$command" "$target" "$stack" ;
-done ;
-
-command=" sudo mkdir /configs " ;
-targets=" InstanceManager1 " ;
-for target in $targets ; do
- send_command "$command" "$target" "$stack" ;
-done ;
-
-command=" sudo cp proxy2aws/configs/aws2cloud.conf /configs " ;
-targets=" InstanceManager1 " ;
-for target in $targets ; do
- send_command "$command" "$target" "$stack" ;
-done ;
-
-command=" sudo cp proxy2aws/configs/aws2prem.conf /configs " ;
-targets=" InstanceManager1 " ;
-for target in $targets ; do
- send_command "$command" "$target" "$stack" ;
-done ;
-
-command=" sudo rm --recursive --force proxy2aws " ;
-targets=" InstanceManager1 " ;
-for target in $targets ; do
- send_command "$command" "$target" "$stack" ;
-done ;
