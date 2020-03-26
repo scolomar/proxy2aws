@@ -8,11 +8,11 @@ services:
    - aws2cloud:/var/log/nginx
   configs:
    - source: aws2cloud
-     target: /etc/nginx/conf.d/nginx.conf
+     target: /etc/nginx/conf.d/aws2cloud.conf
      mode: 0440
   secrets:
    - source: aws2cloud
-     target: htpasswd
+     target: aws2cloud.htpasswd
      mode: 0440
      uid: '101'
      gid: '101'
@@ -28,8 +28,12 @@ services:
   volumes:
    - cloud2instance:/var/log/nginx
   configs:
+   - source: aws2cloud
+     target: /etc/nginx/conf.d/aws2cloud.conf
+     mode: 0440
+  secrets:
    - source: cloud2instance
-     target: /etc/nginx/conf.d/nginx.conf
+     target: etc/nginx/conf.d/cloud2instance.conf
      mode: 0440
   deploy:
    replicas: 3
@@ -44,8 +48,8 @@ volumes:
 configs:
  aws2cloud:
   file: /configs/aws2cloud.conf
- cloud2instance:
-  file: /configs/cloud2instance.conf
 secrets:
  aws2cloud:
-  file: /secrets/aws2cloud
+  file: /secrets/aws2cloud.htpasswd
+ cloud2instance:
+  file: /secrets/cloud2instance.conf
