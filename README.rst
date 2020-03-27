@@ -63,7 +63,8 @@ Zones.
 		&& ./docker/AWS/install/Swarm/cluster.sh ;		\
 		rm -rf docker ;
 
-You will need a set of Docker Configs and Secrets to set up the configuration of the application. 
+You will need a set of Docker Configs and Secrets to set up the configuration
+of the application.
 
 You can deploy the following samples instead of creating your own configuration:
 
