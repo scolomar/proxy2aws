@@ -11,6 +11,7 @@ Before creating the infrastructure you will need a Hosted Zone in AWS Route53:
 # TO LIST THE EXISTING HOSTED ZONES
 aws route53 list-hosted-zones --output text ;
 
+
 ```
 
 In case you want to use HTTPS then you will also need a previously provisioned AWS Certificate:
@@ -19,6 +20,7 @@ In case you want to use HTTPS then you will also need a previously provisioned A
 
 # TO LIST THE EXISTING CERTIFICATES IN CASE YOU NEED HTTPS
 aws acm list-certificates --output text ;
+
 
 ```
 
@@ -46,6 +48,7 @@ export stack=$stack                                     \
   && ./docker/AWS/install/Swarm/cluster.sh ;            \
   rm -rf docker ;
 
+
 ```
 
 You will need a set of Docker Configs and Secrets to set up the configuration of the application. 
@@ -60,6 +63,7 @@ export stack=$stack                                     \
   && chmod +x proxy2aws/Shell/deploy-config.sh          \
   && ./proxy2aws/Shell/deploy-config.sh ;               \
   rm -rf proxy2aws ;
+
 
 ```
 
@@ -123,5 +127,6 @@ You can optionally remove the AWS infrastructure created in CloudFormation other
 
 # TO REMOVE THE CLOUDFORMATION STACK
 aws cloudformation delete-stack --stack-name $stack 
+
 
 ```
