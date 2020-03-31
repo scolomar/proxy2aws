@@ -1,7 +1,7 @@
 version: '3.7'
 services:
  aws2prem:
-  image: "secobau/proxy2aws:release-2.0"
+  image: "secobau/proxy2aws:release-3.0"
   ports:
    - "8080:80"
   volumes:
@@ -21,6 +21,6 @@ volumes:
  aws2prem:
 secrets:
  aws2prem:
-  file: /secrets/etc/nginx/conf.d/aws2prem.conf
+  file: /secrets/etc/nginx/conf.d/aws3prem.conf
 
 
