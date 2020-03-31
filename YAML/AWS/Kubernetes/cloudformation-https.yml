@@ -2,7 +2,7 @@
 
 AWSTemplateFormatVersion: "2010-09-09"
 
-Description: This template creates a new VPC and deploys a HA Cluster with Docker.
+Description: This template creates a new VPC and deploys a production-grade HA Cluster.
 
 #============================================================
 # UI Definition
@@ -461,8 +461,6 @@ Resources:
         "Fn::Base64":
           !Sub |
             #!/bin/sh
-            sudo yum install -y git && git clone https://github.com/secobau/docker.git && chmod +x docker/AWS/install/node.sh && ./docker/AWS/install/node.sh && rm -rf docker
-            # AWS SYSTEMS MANAGER
             cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
             
   InstanceManager2:
@@ -479,8 +477,6 @@ Resources:
         "Fn::Base64":
           !Sub |
             #!/bin/sh
-            sudo yum install -y git && git clone https://github.com/secobau/docker.git && chmod +x docker/AWS/install/node.sh && ./docker/AWS/install/node.sh && rm -rf docker
-            # AWS SYSTEMS MANAGER
             cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
 
   InstanceManager3:
@@ -497,8 +493,6 @@ Resources:
         "Fn::Base64":
           !Sub |
             #!/bin/sh
-            sudo yum install -y git && git clone https://github.com/secobau/docker.git && chmod +x docker/AWS/install/node.sh && ./docker/AWS/install/node.sh && rm -rf docker
-            # AWS SYSTEMS MANAGER
             cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
 
   InstanceWorker1:
@@ -513,8 +507,6 @@ Resources:
         "Fn::Base64":
           !Sub |
             #!/bin/sh
-            sudo yum install -y git && git clone https://github.com/secobau/docker.git && chmod +x docker/AWS/install/node.sh && ./docker/AWS/install/node.sh && rm -rf docker
-            # AWS SYSTEMS MANAGER
             cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
 
   InstanceWorker2:
@@ -529,8 +521,6 @@ Resources:
         "Fn::Base64":
           !Sub |
             #!/bin/sh
-            sudo yum install -y git && git clone https://github.com/secobau/docker.git && chmod +x docker/AWS/install/node.sh && ./docker/AWS/install/node.sh && rm -rf docker
-            # AWS SYSTEMS MANAGER
             cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
 
   InstanceWorker3:
@@ -545,8 +535,6 @@ Resources:
         "Fn::Base64":
           !Sub |
             #!/bin/sh
-            sudo yum install -y git && git clone https://github.com/secobau/docker.git && chmod +x docker/AWS/install/node.sh && ./docker/AWS/install/node.sh && rm -rf docker
-            # AWS SYSTEMS MANAGER
             cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
 
   SecurityGroupManagerKubeAPI:
