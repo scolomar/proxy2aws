@@ -1,7 +1,7 @@
 version: '3.7'
 services:
  aws2cloud:
-  image: "secobau/proxy2aws:release-2.0"
+  image: "secobau/proxy2aws:release-3.0"
   ports:
    - "8888:80"
   volumes:
@@ -24,7 +24,7 @@ services:
     constraints:
      - node.role == worker
  cloud2instance:
-  image: "secobau/proxy2aws:release-2.0"
+  image: "secobau/proxy2aws:release-3.0"
   volumes:
    - cloud2instance:/var/log/nginx
   secrets:
