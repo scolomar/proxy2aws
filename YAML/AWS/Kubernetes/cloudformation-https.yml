@@ -456,6 +456,7 @@ Resources:
       KeyName: !Ref KeyName
       SecurityGroupIds:
         - !Ref SecurityGroupManagerKubeAPI
+        - !GetAtt VPC.DefaultSecurityGroup
       SubnetId: !Ref SubnetPrivate1
       UserData:
         "Fn::Base64":
@@ -472,6 +473,7 @@ Resources:
       KeyName: !Ref KeyName
       SecurityGroupIds:
         - !Ref SecurityGroupManagerKubeAPI
+        - !GetAtt VPC.DefaultSecurityGroup
       SubnetId: !Ref SubnetPrivate2
       UserData:
         "Fn::Base64":
@@ -488,6 +490,7 @@ Resources:
       KeyName: !Ref KeyName
       SecurityGroupIds:
         - !Ref SecurityGroupManagerKubeAPI
+        - !GetAtt VPC.DefaultSecurityGroup
       SubnetId: !Ref SubnetPrivate3
       UserData:
         "Fn::Base64":
