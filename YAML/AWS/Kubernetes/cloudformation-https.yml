@@ -95,12 +95,12 @@ Parameters:
     Default: 'c3f3310b-f4ed-4874-8849-bd5c2cfe001f'
 
   InstanceManagerImageId:
-    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Type: 'AWS::EC2::Image::Id'
     Description: >
       Select AMI to use for the Cluster Manager instances. 
       When it's left blank, the default AMI for your AWS region will be used. 
       When setting an AMI, it must be available in your current region.
-    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+    Default: ''
     
   InstanceManagerInstanceType:
     Type: String
@@ -122,12 +122,12 @@ Parameters:
       - t3a.large
     
   InstanceWorkerImageId:
-    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Type: 'AWS::EC2::Image::Id'
     Description: >
       Select AMI to use for the Cluster Worker instances. 
       When it's left blank, the default AMI for your AWS region will be used. 
       When setting an AMI, it must be available in your current region.
-    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+    Default: ''
     
   InstanceWorkerInstanceType:
     Type: String
