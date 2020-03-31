@@ -498,47 +498,47 @@ Resources:
             #!/bin/sh
             cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
 
-#  InstanceWorker1:
-#    Type: AWS::EC2::Instance
-#    Properties:
-#      IamInstanceProfile: !Ref InstanceProfile
-#      ImageId: !Ref InstanceWorkerImageId
-#      InstanceType: !Ref InstanceWorkerInstanceType
-#      KeyName: !Ref KeyName
-#      SubnetId: !Ref SubnetPrivate1
-#      UserData:
-#        "Fn::Base64":
-#          !Sub |
-#            #!/bin/sh
-#            cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
-#
-#  InstanceWorker2:
-#    Type: AWS::EC2::Instance
-#    Properties:
-#      IamInstanceProfile: !Ref InstanceProfile
-#      ImageId: !Ref InstanceWorkerImageId
-#      InstanceType: !Ref InstanceWorkerInstanceType
-#      KeyName: !Ref KeyName
-#      SubnetId: !Ref SubnetPrivate2
-#      UserData:
-#        "Fn::Base64":
-#          !Sub |
-#            #!/bin/sh
-#            cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
-#
-#  InstanceWorker3:
-#    Type: AWS::EC2::Instance
-#    Properties:
-#      IamInstanceProfile: !Ref InstanceProfile
-#      ImageId: !Ref InstanceWorkerImageId
-#      InstanceType: !Ref InstanceWorkerInstanceType
-#      KeyName: !Ref KeyName
-#      SubnetId: !Ref SubnetPrivate3
-#      UserData:
-#        "Fn::Base64":
-#          !Sub |
-#            #!/bin/sh
-#            cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
+  InstanceWorker1:
+    Type: AWS::EC2::Instance
+    Properties:
+      IamInstanceProfile: !Ref InstanceProfile
+      ImageId: !Ref InstanceWorkerImageId
+      InstanceType: !Ref InstanceWorkerInstanceType
+      KeyName: !Ref KeyName
+      SubnetId: !Ref SubnetPrivate1
+      UserData:
+        "Fn::Base64":
+          !Sub |
+            #!/bin/sh
+            cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
+
+  InstanceWorker2:
+    Type: AWS::EC2::Instance
+    Properties:
+      IamInstanceProfile: !Ref InstanceProfile
+      ImageId: !Ref InstanceWorkerImageId
+      InstanceType: !Ref InstanceWorkerInstanceType
+      KeyName: !Ref KeyName
+      SubnetId: !Ref SubnetPrivate2
+      UserData:
+        "Fn::Base64":
+          !Sub |
+            #!/bin/sh
+            cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
+
+  InstanceWorker3:
+    Type: AWS::EC2::Instance
+    Properties:
+      IamInstanceProfile: !Ref InstanceProfile
+      ImageId: !Ref InstanceWorkerImageId
+      InstanceType: !Ref InstanceWorkerInstanceType
+      KeyName: !Ref KeyName
+      SubnetId: !Ref SubnetPrivate3
+      UserData:
+        "Fn::Base64":
+          !Sub |
+            #!/bin/sh
+            cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
 
   SecurityGroupManagerKubeAPI:
     Type: AWS::EC2::SecurityGroup
@@ -710,4 +710,4 @@ Resources:
 #      LoadBalancerArn: !Ref LoadBalancerWorkerAWS2PREM
 #      Port: 443
 #      Protocol: HTTPS
-# 
+ 
