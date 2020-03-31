@@ -100,7 +100,7 @@ Parameters:
       Select AMI to use for the Cluster Manager instances. 
       When it's left blank, the default AMI for your AWS region will be used. 
       When setting an AMI, it must be available in your current region.
-    Default: ''
+    Default: 'ami-0620d12a9cf777c87'
     
   InstanceManagerInstanceType:
     Type: String
@@ -127,7 +127,7 @@ Parameters:
       Select AMI to use for the Cluster Worker instances. 
       When it's left blank, the default AMI for your AWS region will be used. 
       When setting an AMI, it must be available in your current region.
-    Default: ''
+    Default: 'ami-0620d12a9cf777c87'
     
   InstanceWorkerInstanceType:
     Type: String
@@ -498,47 +498,47 @@ Resources:
             #!/bin/sh
             cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
 
-  InstanceWorker1:
-    Type: AWS::EC2::Instance
-    Properties:
-      IamInstanceProfile: !Ref InstanceProfile
-      ImageId: !Ref InstanceWorkerImageId
-      InstanceType: !Ref InstanceWorkerInstanceType
-      KeyName: !Ref KeyName
-      SubnetId: !Ref SubnetPrivate1
-      UserData:
-        "Fn::Base64":
-          !Sub |
-            #!/bin/sh
-            cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
-
-  InstanceWorker2:
-    Type: AWS::EC2::Instance
-    Properties:
-      IamInstanceProfile: !Ref InstanceProfile
-      ImageId: !Ref InstanceWorkerImageId
-      InstanceType: !Ref InstanceWorkerInstanceType
-      KeyName: !Ref KeyName
-      SubnetId: !Ref SubnetPrivate2
-      UserData:
-        "Fn::Base64":
-          !Sub |
-            #!/bin/sh
-            cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
-
-  InstanceWorker3:
-    Type: AWS::EC2::Instance
-    Properties:
-      IamInstanceProfile: !Ref InstanceProfile
-      ImageId: !Ref InstanceWorkerImageId
-      InstanceType: !Ref InstanceWorkerInstanceType
-      KeyName: !Ref KeyName
-      SubnetId: !Ref SubnetPrivate3
-      UserData:
-        "Fn::Base64":
-          !Sub |
-            #!/bin/sh
-            cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
+#  InstanceWorker1:
+#    Type: AWS::EC2::Instance
+#    Properties:
+#      IamInstanceProfile: !Ref InstanceProfile
+#      ImageId: !Ref InstanceWorkerImageId
+#      InstanceType: !Ref InstanceWorkerInstanceType
+#      KeyName: !Ref KeyName
+#      SubnetId: !Ref SubnetPrivate1
+#      UserData:
+#        "Fn::Base64":
+#          !Sub |
+#            #!/bin/sh
+#            cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
+#
+#  InstanceWorker2:
+#    Type: AWS::EC2::Instance
+#    Properties:
+#      IamInstanceProfile: !Ref InstanceProfile
+#      ImageId: !Ref InstanceWorkerImageId
+#      InstanceType: !Ref InstanceWorkerInstanceType
+#      KeyName: !Ref KeyName
+#      SubnetId: !Ref SubnetPrivate2
+#      UserData:
+#        "Fn::Base64":
+#          !Sub |
+#            #!/bin/sh
+#            cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
+#
+#  InstanceWorker3:
+#    Type: AWS::EC2::Instance
+#    Properties:
+#      IamInstanceProfile: !Ref InstanceProfile
+#      ImageId: !Ref InstanceWorkerImageId
+#      InstanceType: !Ref InstanceWorkerInstanceType
+#      KeyName: !Ref KeyName
+#      SubnetId: !Ref SubnetPrivate3
+#      UserData:
+#        "Fn::Base64":
+#          !Sub |
+#            #!/bin/sh
+#            cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
 
   SecurityGroupManagerKubeAPI:
     Type: AWS::EC2::SecurityGroup
@@ -551,27 +551,27 @@ Resources:
         ToPort: 6443
         CidrIp: !Ref SecurityGroupCidrIpManager
       
-  SecurityGroupWorkerAWS2CLOUD:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Allow HTTP access to the applications running on the cluster of workers
-      VpcId: !Ref VPC
-      SecurityGroupIngress:
-      - IpProtocol: tcp
-        FromPort: 443
-        ToPort: 443
-        CidrIp: !Ref SecurityGroupCidrIpWorkerAWS2CLOUD
-      
-  SecurityGroupWorkerAWS2PREM:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Allow HTTPS access to the applications running on the cluster of workers
-      VpcId: !Ref VPC
-      SecurityGroupIngress:
-      - IpProtocol: tcp
-        FromPort: 443
-        ToPort: 443
-        CidrIp: !Ref SecurityGroupCidrIpWorkerAWS2PREM
+#  SecurityGroupWorkerAWS2CLOUD:
+#    Type: AWS::EC2::SecurityGroup
+#    Properties:
+#      GroupDescription: Allow HTTP access to the applications running on the cluster of workers
+#      VpcId: !Ref VPC
+#      SecurityGroupIngress:
+#      - IpProtocol: tcp
+#        FromPort: 443
+#        ToPort: 443
+#        CidrIp: !Ref SecurityGroupCidrIpWorkerAWS2CLOUD
+#      
+#  SecurityGroupWorkerAWS2PREM:
+#    Type: AWS::EC2::SecurityGroup
+#    Properties:
+#      GroupDescription: Allow HTTPS access to the applications running on the cluster of workers
+#      VpcId: !Ref VPC
+#      SecurityGroupIngress:
+#      - IpProtocol: tcp
+#        FromPort: 443
+#        ToPort: 443
+#        CidrIp: !Ref SecurityGroupCidrIpWorkerAWS2PREM
       
   LoadBalancerManagerKubeAPI:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
@@ -583,27 +583,27 @@ Resources:
         - !Ref SubnetPrivate3
       Type: network
         
-  LoadBalancerWorkerAWS2CLOUD:
-    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-    Properties: 
-      SecurityGroups:
-        - !Ref SecurityGroupWorkerAWS2CLOUD
-        - !GetAtt VPC.DefaultSecurityGroup
-      Subnets: 
-        - !Ref SubnetPublic1
-        - !Ref SubnetPublic2
-        - !Ref SubnetPublic3
-        
-  LoadBalancerWorkerAWS2PREM:
-    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-    Properties: 
-      SecurityGroups:
-        - !Ref SecurityGroupWorkerAWS2PREM
-        - !GetAtt VPC.DefaultSecurityGroup
-      Subnets: 
-        - !Ref SubnetPublic1
-        - !Ref SubnetPublic2
-        - !Ref SubnetPublic3
+#  LoadBalancerWorkerAWS2CLOUD:
+#    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+#    Properties: 
+#      SecurityGroups:
+#        - !Ref SecurityGroupWorkerAWS2CLOUD
+#        - !GetAtt VPC.DefaultSecurityGroup
+#      Subnets: 
+#        - !Ref SubnetPublic1
+#        - !Ref SubnetPublic2
+#        - !Ref SubnetPublic3
+#        
+#  LoadBalancerWorkerAWS2PREM:
+#    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+#    Properties: 
+#      SecurityGroups:
+#        - !Ref SecurityGroupWorkerAWS2PREM
+#        - !GetAtt VPC.DefaultSecurityGroup
+#      Subnets: 
+#        - !Ref SubnetPublic1
+#        - !Ref SubnetPublic2
+#        - !Ref SubnetPublic3
         
   RecordSetKubeAPI:
     Type: AWS::Route53::RecordSet
@@ -615,25 +615,25 @@ Resources:
       Name: !Sub 'kube-apiserver.${HostedZoneName}'
       Type: A
       
-  RecordSetAWS2CLOUD:
-    Type: AWS::Route53::RecordSet
-    Properties: 
-      AliasTarget: 
-        DNSName: !GetAtt LoadBalancerWorkerAWS2CLOUD.DNSName
-        HostedZoneId: !GetAtt LoadBalancerWorkerAWS2CLOUD.CanonicalHostedZoneID
-      HostedZoneName: !Sub '${HostedZoneName}.'
-      Name: !Sub 'aws2cloud.${HostedZoneName}'
-      Type: A
-      
-  RecordSetAWS2PREM:
-    Type: AWS::Route53::RecordSet
-    Properties: 
-      AliasTarget: 
-        DNSName: !GetAtt LoadBalancerWorkerAWS2PREM.DNSName
-        HostedZoneId: !GetAtt LoadBalancerWorkerAWS2PREM.CanonicalHostedZoneID
-      HostedZoneName: !Sub '${HostedZoneName}.'
-      Name: !Sub 'aws2prem.${HostedZoneName}'
-      Type: A
+#  RecordSetAWS2CLOUD:
+#    Type: AWS::Route53::RecordSet
+#    Properties: 
+#      AliasTarget: 
+#        DNSName: !GetAtt LoadBalancerWorkerAWS2CLOUD.DNSName
+#        HostedZoneId: !GetAtt LoadBalancerWorkerAWS2CLOUD.CanonicalHostedZoneID
+#      HostedZoneName: !Sub '${HostedZoneName}.'
+#      Name: !Sub 'aws2cloud.${HostedZoneName}'
+#      Type: A
+#      
+#  RecordSetAWS2PREM:
+#    Type: AWS::Route53::RecordSet
+#    Properties: 
+#      AliasTarget: 
+#        DNSName: !GetAtt LoadBalancerWorkerAWS2PREM.DNSName
+#        HostedZoneId: !GetAtt LoadBalancerWorkerAWS2PREM.CanonicalHostedZoneID
+#      HostedZoneName: !Sub '${HostedZoneName}.'
+#      Name: !Sub 'aws2prem.${HostedZoneName}'
+#      Type: A
       
   TargetGroupManagerKubeAPI:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -647,35 +647,35 @@ Resources:
       TargetType: instance
       VpcId: !Ref VPC
 
-  TargetGroupWorkerAWS2CLOUD:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    Properties: 
-      HealthCheckPath: /
-      HealthCheckPort: 8888
-      HealthCheckProtocol: HTTP
-      Port: 8888
-      Protocol: HTTP
-      Targets: 
-        -   Id: !Ref InstanceWorker1
-        -   Id: !Ref InstanceWorker2
-        -   Id: !Ref InstanceWorker3
-      TargetType: instance
-      VpcId: !Ref VPC
-
-  TargetGroupWorkerAWS2PREM:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    Properties: 
-      HealthCheckPath: /
-      HealthCheckPort: 8080
-      HealthCheckProtocol: HTTP
-      Port: 8080
-      Protocol: HTTP
-      Targets: 
-        -   Id: !Ref InstanceWorker1
-        -   Id: !Ref InstanceWorker2
-        -   Id: !Ref InstanceWorker3
-      TargetType: instance
-      VpcId: !Ref VPC
+#  TargetGroupWorkerAWS2CLOUD:
+#    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+#    Properties: 
+#      HealthCheckPath: /
+#      HealthCheckPort: 8888
+#      HealthCheckProtocol: HTTP
+#      Port: 8888
+#      Protocol: HTTP
+#      Targets: 
+#        -   Id: !Ref InstanceWorker1
+#        -   Id: !Ref InstanceWorker2
+#        -   Id: !Ref InstanceWorker3
+#      TargetType: instance
+#      VpcId: !Ref VPC
+#
+#  TargetGroupWorkerAWS2PREM:
+#    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+#    Properties: 
+#      HealthCheckPath: /
+#      HealthCheckPort: 8080
+#      HealthCheckProtocol: HTTP
+#      Port: 8080
+#      Protocol: HTTP
+#      Targets: 
+#        -   Id: !Ref InstanceWorker1
+#        -   Id: !Ref InstanceWorker2
+#        -   Id: !Ref InstanceWorker3
+#      TargetType: instance
+#      VpcId: !Ref VPC
 
   ListenerManagerKubeAPI:
     Type: AWS::ElasticLoadBalancingV2::Listener
@@ -687,27 +687,27 @@ Resources:
       Port: 6443
       Protocol: TCP
 
-  ListenerWorkerAWS2CLOUD:
-    Type: AWS::ElasticLoadBalancingV2::Listener
-    Properties: 
-      Certificates:
-        - CertificateArn: !Sub 'arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${Identifier}'
-      DefaultActions: 
-        - TargetGroupArn: !Ref TargetGroupWorkerAWS2CLOUD
-          Type: forward
-      LoadBalancerArn: !Ref LoadBalancerWorkerAWS2CLOUD
-      Port: 443
-      Protocol: HTTPS
-
-  ListenerWorkerAWS2PREM:
-    Type: AWS::ElasticLoadBalancingV2::Listener
-    Properties: 
-      Certificates:
-        - CertificateArn: !Sub 'arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${Identifier}'
-      DefaultActions: 
-        - TargetGroupArn: !Ref TargetGroupWorkerAWS2PREM
-          Type: forward
-      LoadBalancerArn: !Ref LoadBalancerWorkerAWS2PREM
-      Port: 443
-      Protocol: HTTPS
- 
+#  ListenerWorkerAWS2CLOUD:
+#    Type: AWS::ElasticLoadBalancingV2::Listener
+#    Properties: 
+#      Certificates:
+#        - CertificateArn: !Sub 'arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${Identifier}'
+#      DefaultActions: 
+#        - TargetGroupArn: !Ref TargetGroupWorkerAWS2CLOUD
+#          Type: forward
+#      LoadBalancerArn: !Ref LoadBalancerWorkerAWS2CLOUD
+#      Port: 443
+#      Protocol: HTTPS
+#
+#  ListenerWorkerAWS2PREM:
+#    Type: AWS::ElasticLoadBalancingV2::Listener
+#    Properties: 
+#      Certificates:
+#        - CertificateArn: !Sub 'arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${Identifier}'
+#      DefaultActions: 
+#        - TargetGroupArn: !Ref TargetGroupWorkerAWS2PREM
+#          Type: forward
+#      LoadBalancerArn: !Ref LoadBalancerWorkerAWS2PREM
+#      Port: 443
+#      Protocol: HTTPS
+# 
