@@ -160,7 +160,7 @@ Parameters:
       Allowed CIDR block for external web access to the Cluster Manager Load Balancer. 
       It defines the block of IPs that can access the Cluster Manager Load Balancer and, consequently, the Kube API servers. 
       Set it to 0.0.0.0/0 to make it accessible from anywhere.
-    Default: 0.0.0.0/0
+    Default: 192.168.0.0/16
     
   SecurityGroupCidrIpWorkerAWS2CLOUD:
     Type: String
@@ -454,6 +454,8 @@ Resources:
       ImageId: !Ref InstanceManagerImageId
       InstanceType: !Ref InstanceManagerInstanceType
       KeyName: !Ref KeyName
+      SecurityGroupIds:
+        - !Ref SecurityGroupManagerKubeAPI
       SubnetId: !Ref SubnetPrivate1
       UserData:
         "Fn::Base64":
@@ -470,6 +472,8 @@ Resources:
       ImageId: !Ref InstanceManagerImageId
       InstanceType: !Ref InstanceManagerInstanceType
       KeyName: !Ref KeyName
+      SecurityGroupIds:
+        - !Ref SecurityGroupManagerKubeAPI
       SubnetId: !Ref SubnetPrivate2
       UserData:
         "Fn::Base64":
@@ -486,6 +490,8 @@ Resources:
       ImageId: !Ref InstanceManagerImageId
       InstanceType: !Ref InstanceManagerInstanceType
       KeyName: !Ref KeyName
+      SecurityGroupIds:
+        - !Ref SecurityGroupManagerKubeAPI
       SubnetId: !Ref SubnetPrivate3
       UserData:
         "Fn::Base64":
@@ -546,7 +552,7 @@ Resources:
   SecurityGroupManagerKubeAPI:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Allow HTTPS access to the Kube API server running on the cluster of managers
+      GroupDescription: Allow TCP access to the Kube API server running on the cluster of managers
       VpcId: !Ref VPC
       SecurityGroupIngress:
       - IpProtocol: tcp
