@@ -2,7 +2,7 @@
 
 AWSTemplateFormatVersion: "2010-09-09"
 
-Description: This template creates a new VPC and deploys Docker Swarm.
+Description: This template creates a new VPC and deploys a production-grade HA cluster in AWS
 
 #============================================================
 # UI Definition
@@ -31,13 +31,13 @@ Metadata:
           - KeyName
       -
         Label:
-          default: Swarm Manager Configuration
+          default: Cluster Manager Configuration
         Parameters:
           - InstanceManagerImageId
           - InstanceManagerInstanceType
       -
         Label:
-          default: Swarm Worker Configuration
+          default: Cluster Worker Configuration
         Parameteres:
           - InstanceWorkerImageId
           - InstanceWorkerInstanceType
@@ -46,19 +46,19 @@ Metadata:
       HostedZoneName:
         default: The name of the hosted zone that you want to create records in
       InstanceManagerImageId:
-        default: AMI to use for Swarm Manager Instances
+        default: AMI to use for Cluster Manager Instances
       InstanceManagerInstanceType:
-        default: Swarm Manager Instance Size
+        default: Cluster Manager Instance Size
       InstanceWorkerImageId:
-        default: AMI to use for Swarm Worker Instances
+        default: AMI to use for Cluster Worker Instances
       InstanceWorkerInstanceType:
-        default: Swarm Worker Instance Size
+        default: Cluster Worker Instance Size
       KeyName:
         default: The name of the key pair
       SecurityGroupCidrIpWorkerAWS2PREM:
-        default: Allowed CIDR for ALB AWS2PREM Swarm Worker Access
+        default: Allowed CIDR for ALB AWS2PREM Cluster Worker Access
       SecurityGroupCidrIpWorkerAWS2CLOUD:
-        default: Allowed CIDR for ALB AWS2CLOUD Swarm Worker Access
+        default: Allowed CIDR for ALB AWS2CLOUD Cluster Worker Access
       SubnetCidrBlockPrivate1:
         default: Private Subnet 1 CIDR
       SubnetCidrBlockPrivate2:
@@ -85,7 +85,7 @@ Parameters:
   InstanceManagerImageId:
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
     Description: >
-      Select AMI to use for the Swarm Manager instances. 
+      Select AMI to use for the Cluster Manager instances. 
       When it's left blank, the default AMI for your AWS region will be used. 
       When setting an AMI, it must be available in your current region.
     Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
@@ -93,7 +93,7 @@ Parameters:
   InstanceManagerInstanceType:
     Type: String
     Description: >
-      Select Amazon EC2 instance type for the Swarm Manager instances.
+      Select Amazon EC2 instance type for the Cluster Manager instances.
     Default: t3a.nano
     ConstraintDescription: >
       Choose an instance type.
@@ -112,7 +112,7 @@ Parameters:
   InstanceWorkerImageId:
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
     Description: >
-      Select AMI to use for the Swarm Worker instances. 
+      Select AMI to use for the Cluster Worker instances. 
       When it's left blank, the default AMI for your AWS region will be used. 
       When setting an AMI, it must be available in your current region.
     Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
@@ -120,7 +120,7 @@ Parameters:
   InstanceWorkerInstanceType:
     Type: String
     Description: >
-      Select Amazon EC2 instance type for the Swarm Worker instances.
+      Select Amazon EC2 instance type for the Cluster Worker instances.
     Default: t3a.nano
     ConstraintDescription: >
       Choose an instance type.
@@ -145,16 +145,16 @@ Parameters:
   SecurityGroupCidrIpWorkerAWS2PREM:
     Type: String
     Description: >
-      Allowed CIDR block for external web access to the Swarm Worker AWS2PREM Load Balancer. 
-      It defines the block of IPs that can access the Swarm Worker Load Balancer 1 and, consequently, the application servers. 
+      Allowed CIDR block for external web access to the Cluster Worker AWS2PREM Load Balancer. 
+      It defines the block of IPs that can access the Cluster Worker Load Balancer 1 and, consequently, the application servers. 
       Set it to 0.0.0.0/0 to make it accessible from anywhere.
     Default: 0.0.0.0/0
     
   SecurityGroupCidrIpWorkerAWS2CLOUD:
     Type: String
     Description: >
-      Allowed CIDR block for external web access to the Swarm Worker AWS2CLOUD Load Balancer. 
-      It defines the block of IPs that can access the Swarm Worker Load Balancer 2 and, consequently, the application servers. 
+      Allowed CIDR block for external web access to the Cluster Worker AWS2CLOUD Load Balancer. 
+      It defines the block of IPs that can access the Cluster Worker Load Balancer 2 and, consequently, the application servers. 
       Set it to 0.0.0.0/0 to make it accessible from anywhere.
     Default: 0.0.0.0/0
     
@@ -163,48 +163,48 @@ Parameters:
     Description: >
       CIDR block for private subnet located in Availability Zone 1. 
       All resources located on this subnet are provided an IP within this address block. 
-    Default: 192.168.1.0/24
+    Default: 10.168.1.0/24
     
   SubnetCidrBlockPrivate2:
     Type: String
     Description: >
       CIDR block for private subnet located in Availability Zone 2. 
       All resources located on this subnet are provided an IP within this address block. 
-    Default: 192.168.3.0/24
+    Default: 10.168.3.0/24
     
   SubnetCidrBlockPrivate3:
     Type: String
     Description: >
       CIDR block for private subnet located in Availability Zone 3. 
       All resources located on this subnet are provided an IP within this address block. 
-    Default: 192.168.5.0/24
+    Default: 10.168.5.0/24
     
   SubnetCidrBlockPublic1:
     Type: String
     Description: >
       CIDR block for public (DMZ) subnet located in Availability Zone 1. 
       All resources located on this subnet are provided an IP within this address block. 
-    Default: 192.168.2.0/24
+    Default: 10.168.2.0/24
     
   SubnetCidrBlockPublic2:
     Type: String
     Description: >
       CIDR block for public (DMZ) subnet located in Availability Zone 2. 
       All resources located on this subnet are provided an IP within this address block. 
-    Default: 192.168.4.0/24
+    Default: 10.168.4.0/24
     
   SubnetCidrBlockPublic3:
     Type: String
     Description: >
       CIDR block for public (DMZ) subnet located in Availability Zone 3. 
       All resources located on this subnet are provided an IP within this address block. 
-    Default: 192.168.6.0/24
+    Default: 10.168.6.0/24
     
   VPCCidrBlock:
     Type: String
     Description: >
       CIDR block for the VPC. All the subnets and resources will have an IP within this address block.
-    Default: 192.168.0.0/16
+    Default: 10.168.0.0/16
     
 #============================================================
 # Resources
@@ -439,10 +439,8 @@ Resources:
         "Fn::Base64":
           !Sub |
             #!/bin/sh
-            # Swarm LEADER
-            sudo yum install -y git && git clone https://github.com/secobau/docker.git && chmod +x docker/AWS/install/Swarm/leader.sh && ./docker/AWS/install/Swarm/leader.sh && rm -rf docker
-            # AWS SYSTEMS MANAGER
             cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
+            sudo yum install -y git && git clone https://github.com/secobau/docker.git && chmod +x docker/AWS/install/AMI/node.sh && ./docker/AWS/install/AMI/node.sh && rm -rf docker
             
   InstanceManager2:
     Type: AWS::EC2::Instance
@@ -456,10 +454,8 @@ Resources:
         "Fn::Base64":
           !Sub |
             #!/bin/sh
-            # Swarm MANAGER
-            sudo yum install -y git && git clone https://github.com/secobau/docker.git && chmod +x docker/AWS/install/node.sh && ./docker/AWS/install/node.sh && rm -rf docker
-            # AWS SYSTEMS MANAGER
             cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
+            sudo yum install -y git && git clone https://github.com/secobau/docker.git && chmod +x docker/AWS/install/AMI/node.sh && ./docker/AWS/install/AMI/node.sh && rm -rf docker
 
   InstanceManager3:
     Type: AWS::EC2::Instance
@@ -473,10 +469,8 @@ Resources:
         "Fn::Base64":
           !Sub |
             #!/bin/sh
-            # Swarm MANAGER
-            sudo yum install -y git && git clone https://github.com/secobau/docker.git && chmod +x docker/AWS/install/node.sh && ./docker/AWS/install/node.sh && rm -rf docker
-            # AWS SYSTEMS MANAGER
             cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
+            sudo yum install -y git && git clone https://github.com/secobau/docker.git && chmod +x docker/AWS/install/AMI/node.sh && ./docker/AWS/install/AMI/node.sh && rm -rf docker
 
   InstanceWorker1:
     Type: AWS::EC2::Instance
@@ -490,10 +484,8 @@ Resources:
         "Fn::Base64":
           !Sub |
             #!/bin/sh
-            # Swarm WORKER
-            sudo yum install -y git && git clone https://github.com/secobau/docker.git && chmod +x docker/AWS/install/node.sh && ./docker/AWS/install/node.sh && rm -rf docker
-            # AWS SYSTEMS MANAGER
             cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
+            sudo yum install -y git && git clone https://github.com/secobau/docker.git && chmod +x docker/AWS/install/AMI/node.sh && ./docker/AWS/install/AMI/node.sh && rm -rf docker
 
   InstanceWorker2:
     Type: AWS::EC2::Instance
@@ -507,10 +499,8 @@ Resources:
         "Fn::Base64":
           !Sub |
             #!/bin/sh
-            # Swarm WORKER
-            sudo yum install -y git && git clone https://github.com/secobau/docker.git && chmod +x docker/AWS/install/node.sh && ./docker/AWS/install/node.sh && rm -rf docker
-            # AWS SYSTEMS MANAGER
             cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
+            sudo yum install -y git && git clone https://github.com/secobau/docker.git && chmod +x docker/AWS/install/AMI/node.sh && ./docker/AWS/install/AMI/node.sh && rm -rf docker
 
   InstanceWorker3:
     Type: AWS::EC2::Instance
@@ -524,10 +514,8 @@ Resources:
         "Fn::Base64":
           !Sub |
             #!/bin/sh
-            # Swarm WORKER
-            sudo yum install -y git && git clone https://github.com/secobau/docker.git && chmod +x docker/AWS/install/node.sh && ./docker/AWS/install/node.sh && rm -rf docker
-            # AWS SYSTEMS MANAGER
             cd /tmp && curl https://amazon-ssm-${AWS::Region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm && sudo yum install -y amazon-ssm-agent.rpm
+            sudo yum install -y git && git clone https://github.com/secobau/docker.git && chmod +x docker/AWS/install/AMI/node.sh && ./docker/AWS/install/AMI/node.sh && rm -rf docker
 
   SecurityGroupWorkerAWS2PREM:
     Type: AWS::EC2::SecurityGroup
