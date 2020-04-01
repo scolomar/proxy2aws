@@ -31,8 +31,8 @@ The EC2 machines do not have any open port accessible from outside.
 We will use AWS Systems Manager to connect and maintain the EC2 machines without the need of any bastion or breaking the isolation.
 
 Here follow the links to the CloudFormation templates that define the infrastructure. You can choose between HTTP and HTTPS:
-* https://raw.githubusercontent.com/secobau/proxy2aws/master/YAML/AWS/cloudformation-http.yml
-* https://raw.githubusercontent.com/secobau/proxy2aws/master/YAML/AWS/cloudformation-https.yml
+* https://raw.githubusercontent.com/secobau/proxy2aws/master/AWS/AMI/cloudformation-http.yml
+* https://raw.githubusercontent.com/secobau/proxy2aws/master/AWS/AMI/cloudformation-https.yml
 
 After you have successfully deployed the infrastructure in AWS you will create a Cloud9 instance to deploy a Highly Available Docker Swarm cluster consisting of three managers and three workers spread on three different Availability Zones. 
 
@@ -42,11 +42,12 @@ After you have successfully deployed the infrastructure in AWS you will create a
 stack=proxy2aws ;
 
 # TO CREATE THE SWARM
+rm -rf docker ;
 export stack=$stack                                     \
   && git clone https://github.com/secobau/docker.git    \
   && chmod +x docker/AWS/install/Swarm/cluster.sh       \
-  && ./docker/AWS/install/Swarm/cluster.sh ;            \
-  rm -rf docker ;
+  && ./docker/AWS/install/Swarm/cluster.sh              \
+  && rm -rf docker ;
 
 
 ```
@@ -58,11 +59,12 @@ You can deploy the following samples instead of creating your own configuration:
 ```BASH
 
 # IN CASE YOU NEED TO DEPLOY THE SAMPLE CONFIG FILES
+rm -rf proxy2aws ;
 export stack=$stack                                     \
   && git clone https://github.com/secobau/proxy2aws.git \
   && chmod +x proxy2aws/Shell/deploy-config.sh          \
-  && ./proxy2aws/Shell/deploy-config.sh ;               \
-  rm -rf proxy2aws ;
+  && ./proxy2aws/Shell/deploy-config.sh                 \
+  && rm -rf proxy2aws ;
 
 
 ```
@@ -79,12 +81,13 @@ deploy=latest ;
 deploy=release ;
 
 # TO DEPLOY THE APP
+rm -rf proxy2aws ;
 export stack=$stack                                     \
   && export deploy=$deploy                              \
   && git clone https://github.com/secobau/proxy2aws.git \
   && chmod +x proxy2aws/Shell/deploy.sh                 \
-  && ./proxy2aws/Shell/deploy.sh ;                      \
-  rm -rf proxy2aws ;
+  && ./proxy2aws/Shell/deploy.sh                        \
+  && rm -rf proxy2aws ;
 
 
 ```
@@ -94,11 +97,12 @@ After the deployment is finished it is a good idea to remove the Docker Configs 
 ```BASH
 
 # TO REMOVE THE CONFIGS AND SECRETS FROM DISK
+rm -rf proxy2aws ;
 export stack=$stack                                     \
   && git clone https://github.com/secobau/proxy2aws.git \
   && chmod +x proxy2aws/Shell/remove-config.sh          \
-  && ./proxy2aws/Shell/remove-config.sh ;               \
-  rm -rf proxy2aws ;
+  && ./proxy2aws/Shell/remove-config.sh                 \
+  && rm -rf proxy2aws ;
 
 
 ```
@@ -112,11 +116,12 @@ Once you are finished you can remove the containers with the following script:
 ```BASH
 
 # TO REMOVE THE APP
+rm -rf proxy2aws ;
 export stack=$stack                                     \
   && git clone https://github.com/secobau/proxy2aws.git \
   && chmod +x proxy2aws/Shell/remove.sh                 \
-  && ./proxy2aws/Shell/remove.sh ;                      \
-  rm -rf proxy2aws ;
+  && ./proxy2aws/Shell/remove.sh                        \
+  && rm -rf proxy2aws ;
 
 
 ```
