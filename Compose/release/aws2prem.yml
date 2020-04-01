@@ -21,6 +21,6 @@ volumes:
  aws2prem:
 secrets:
  aws2prem:
-  file: /secrets/etc/nginx/conf.d/aws3prem.conf
+  file: /secrets/etc/nginx/conf.d/aws2prem.conf
 
 
