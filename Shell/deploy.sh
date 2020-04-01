@@ -26,13 +26,13 @@ done ;
 command=" sudo docker stack deploy --compose-file proxy2aws/Compose/$deploy/aws2cloud.yml aws2cloud " ;
 targets=" InstanceManager1 " ;
 for target in $targets ; do
- send_command "$command" "$target" "$stack" ;
+ send_list_command "$command" "$target" "$stack" ;
 done ;
 
 command=" sudo docker stack deploy --compose-file proxy2aws/Compose/$deploy/aws2prem.yml aws2prem " ;
 targets=" InstanceManager1 " ;
 for target in $targets ; do
- send_command "$command" "$target" "$stack" ;
+ send_list_command "$command" "$target" "$stack" ;
 done ;
 
 command=" sudo rm --recursive --force proxy2aws " ;
