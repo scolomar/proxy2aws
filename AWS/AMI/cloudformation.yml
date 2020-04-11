@@ -19,7 +19,7 @@ Metadata:
       -
         Label:
           default: Cluster Worker Configuration
-        Parameteres:
+        Parameters:
           - InstanceWorkerImageId
           - InstanceWorkerInstanceType
       -
