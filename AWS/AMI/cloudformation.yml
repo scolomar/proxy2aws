@@ -35,6 +35,8 @@ Metadata:
           - PortTargetGroupWorker2
           - ProtocolListenerWorker1
           - ProtocolListenerWorker2
+          - ProtocolTargetGroupWorker1
+          - ProtocolTargetGroupWorker2
           - RecordSetName1
           - RecordSetName2
           - SecurityGroupCidrIpWorker1
@@ -77,13 +79,17 @@ Metadata:
       PortListenerWorker2:
         default: The listening port for Listener Worker 2
       PortTargetGroupWorker1:
-        default: The internal listening port for service 1
+        default: The internal listening port for Target Group Worker 1
       PortTargetGroupWorker2:
-        default: The internal listening port for service 2
+        default: The internal listening port for Target Group Worker 2
       ProtocolListenerWorker1:
         default: The protocol for Listener Worker 1
       ProtocolListenerWorker2:
         default: The protocol for Listener Worker 2
+      ProtocolTargetGroupWorker1:
+        default: The internal protocol for Target Group Worker 1
+      ProtocolTargetGroupWorker2:
+        default: The internal protocol for Target Group Worker 2
       RecordSetName1:
         default: The name of the Record Set for service 1
       RecordSetName2:
@@ -220,25 +226,25 @@ Parameters:
   PortTargetGroupWorker1:
     Default: 8080
     Description: >
-      The internal listening port for service 1.
+      The internal listening port for Target Group Worker 1.
     Type: Number
     
   PortTargetGroupWorker2:
     Default: 8888
     Description: >
-      The internal listening port for service 2.
+      The internal listening port for Target Group Worker 2.
     Type: Number
     
   ProtocolTargetGroupWorker1:
     Default: HTTP
     Description: >
-      The internal protocol for service 1.
+      The internal protocol for Target Group Worker 1.
     Type: String
     
   ProtocolTargetGroupWorker2:
     Default: HTTP
     Description: >
-      The internal protocol for service 2.
+      The internal protocol for Target Group Worker 2.
     Type: String
     
   RecordSetName1:
