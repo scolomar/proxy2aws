@@ -27,10 +27,15 @@ Metadata:
           default: Network Configuration
         Parameters:
           - HostedZoneName
-          - PortExternalService1
-          - PortExternalService2
-          - PortInternalService1
-          - PortInternalService2
+          - IpProtocolListenerWorker1
+          - IpProtocolListenerWorker2
+          - PortListenerWorker1
+          - PortListenerWorker2
+          - PortTargetGroupWorker1
+          - PortTargetGroupWorker2
+          - ProtocolListenerWorker1
+          - ProtocolListenerWorker2
+          - RecordSetName1
           - RecordSetName2
           - SecurityGroupCidrIpWorker1
           - SecurityGroupCidrIpWorker2
@@ -61,16 +66,24 @@ Metadata:
         default: AMI to use for Cluster Worker Instances
       InstanceWorkerInstanceType:
         default: Cluster Worker Instance Size
+      IpProtocolListenerWorker1:
+        default: The IP protocol for Listener Worker 1
+      IpProtocolListenerWorker2:
+        default: The IP protocol for Listener Worker 2
       KeyName:
         default: The name of the key pair
-      PortExternalService1:
-        default: The external listening port for service 1
-      PortExternalService2:
-        default: The external listening port for service 2
-      PortInternalService1:
+      PortListenerWorker1:
+        default: The listening port for Listener Worker 1
+      PortListenerWorker2:
+        default: The listening port for Listener Worker 2
+      PortTargetGroupWorker1:
         default: The internal listening port for service 1
-      PortInternalService2:
+      PortTargetGroupWorker2:
         default: The internal listening port for service 2
+      ProtocolListenerWorker1:
+        default: The protocol for Listener Worker 1
+      ProtocolListenerWorker2:
+        default: The protocol for Listener Worker 2
       RecordSetName1:
         default: The name of the Record Set for service 1
       RecordSetName2:
@@ -162,35 +175,71 @@ Parameters:
       Select Amazon EC2 instance type for the Cluster Worker instances.
     Type: String
     
+  IpProtocolListenerWorker1:
+    Default: tcp
+    Description: >
+      The IP protocol for Listener Worker 1.
+    Type: String
+    
+  IpProtocolListenerWorker2:
+    Default: tcp
+    Description: >
+      The IP protocol for Listener Worker 2.
+    Type: String
+    
   KeyName:
     Default: proxy2aws
     Description: >
       The name of the key pair. You can create a key pair using CreateKeyPair or ImportKeyPair.
     Type: String
     
-  PortExternalService1:
+  PortListenerWorker1:
     Default: 443
     Description: >
-      The external listening port for service 1.
-    Type: Integer
+      The listening port for Listener Worker 1.
+    Type: Number
     
-  PortExternalService2:
+  PortListenerWorker2:
     Default: 443
     Description: >
-      The external listening port for service 2.
-    Type: Integer
+      The listening port for Listener Worker 2.
+    Type: Number
     
-  PortInternalService1:
+  ProtocolListenerWorker1:
+    Default: HTTPS
+    Description: >
+      The protocol for Listener Worker 1.
+    Type: String
+    
+  ProtocolListenerWorker2:
+    Default: HTTPS
+    Description: >
+      The protocol for Listener Worker 2.
+    Type: String
+    
+  PortTargetGroupWorker1:
     Default: 8080
     Description: >
       The internal listening port for service 1.
-    Type: Integer
+    Type: Number
     
-  PortInternalService2:
+  PortTargetGroupWorker2:
     Default: 8888
     Description: >
       The internal listening port for service 2.
-    Type: Integer
+    Type: Number
+    
+  ProtocolTargetGroupWorker1:
+    Default: HTTP
+    Description: >
+      The internal protocol for service 1.
+    Type: String
+    
+  ProtocolTargetGroupWorker2:
+    Default: HTTP
+    Description: >
+      The internal protocol for service 2.
+    Type: String
     
   RecordSetName1:
     Default: aws2prem
@@ -394,8 +443,8 @@ Resources:
         - TargetGroupArn: !Ref TargetGroupWorker1
           Type: forward
       LoadBalancerArn: !Ref LoadBalancerWorker1
-      Port: 443
-      Protocol: HTTPS
+      Port: !Ref PortListenerWorker1
+      Protocol: !Ref ProtocolListenerWorker1
     Type: AWS::ElasticLoadBalancingV2::Listener
  
   ListenerWorker2:
@@ -406,8 +455,8 @@ Resources:
         - TargetGroupArn: !Ref TargetGroupWorker2
           Type: forward
       LoadBalancerArn: !Ref LoadBalancerWorker2
-      Port: 443
-      Protocol: HTTPS
+      Port: !Ref PortListenerWorker2
+      Protocol: !Ref ProtocolListenerWorker2
     Type: AWS::ElasticLoadBalancingV2::Listener
  
   LoadBalancerWorker1:
@@ -540,25 +589,25 @@ Resources:
 
   SecurityGroupWorker1:
     Properties:
-      GroupDescription: Allow HTTPS access to the applications running on the cluster of workers for Service 1
+      GroupDescription: Allow access to the applications running on the cluster of workers for Service 1
       SecurityGroupIngress:
       - 
         CidrIp: !Ref SecurityGroupCidrIpWorker1
-        FromPort: !Sub ${PortExternalService1}
-        IpProtocol: tcp
-        ToPort: !Sub ${PortExternalService1}
+        FromPort: !Ref PortListenerWorker1
+        IpProtocol: !Ref IpProtocolListenerWorker1
+        ToPort: !Ref PortListenerWorker1
       VpcId: !Ref VPC
     Type: AWS::EC2::SecurityGroup
       
   SecurityGroupWorker2:
     Properties:
-      GroupDescription: Allow HTTPS access to the applications running on the cluster of workers for Service 2
+      GroupDescription: Allow access to the applications running on the cluster of workers for Service 2
       SecurityGroupIngress:
       - 
         CidrIp: !Ref SecurityGroupCidrIpWorker2
-        FromPort: !Sub ${PortExternalService2}
-        IpProtocol: tcp
-        ToPort: !Sub ${PortExternalService2}
+        FromPort: !Ref PortListenerWorker2
+        IpProtocol: !Ref IpProtocolListenerWorker2
+        ToPort: !Ref PortListenerWorker2
       VpcId: !Ref VPC
     Type: AWS::EC2::SecurityGroup
       
@@ -660,8 +709,8 @@ Resources:
 
   TargetGroupWorker1:
     Properties: 
-      Port: !Sub ${PortInternalService1}
-      Protocol: HTTP
+      Port: !Ref PortTargetGroupWorker1
+      Protocol: !Ref ProtocolTargetGroupWorker1
       Targets: 
         -   Id: !Ref InstanceWorker1
         -   Id: !Ref InstanceWorker2
@@ -672,8 +721,8 @@ Resources:
 
   TargetGroupWorker2:
     Properties: 
-      Port: !Sub ${PortInternalService2}
-      Protocol: HTTP
+      Port: !Ref PortTargetGroupWorker2
+      Protocol: !Ref ProtocolTargetGroupWorker2
       Targets: 
         -   Id: !Ref InstanceWorker1
         -   Id: !Ref InstanceWorker2
