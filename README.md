@@ -1,4 +1,4 @@
-This project consists of an NginX Reverse Proxy that will forward traffic from a cloud service to an internal service on premises and vice versa.
+This project consists of an NginX Reverse Proxy that will forward traffic from a cloud service to an internal service on premises and vice-versa.
 
 The connection between the proxy and the services is done through HTTPS with Basic Authentication.
 
