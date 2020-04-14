@@ -30,9 +30,8 @@ The EC2 machines do not have any open port accessible from outside.
 
 We will use AWS Systems Manager to connect and maintain the EC2 machines without the need of any bastion or breaking the isolation.
 
-Here follow the links to the CloudFormation templates that define the infrastructure. You can choose between HTTP and HTTPS:
-* https://raw.githubusercontent.com/secobau/proxy2aws/master/AWS/AMI/cloudformation-http.yml
-* https://raw.githubusercontent.com/secobau/proxy2aws/master/AWS/AMI/cloudformation-https.yml
+Here follow the links to the CloudFormation templates that define the infrastructure:
+* https://raw.githubusercontent.com/secobau/proxy2aws/master/AWS/AMI/cloudformation.yml
 
 After you have successfully deployed the infrastructure in AWS you will create a Cloud9 instance to deploy a Highly Available Docker Swarm cluster consisting of three managers and three workers spread on three different Availability Zones. 
 
