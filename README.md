@@ -80,8 +80,8 @@ The deployment can use the latest image for Continous Integration or the specifi
 ```BASH
 
 # DEFINE THE TYPE OF DEPLOYMENT: LATEST OR RELEASE
-deploy=latest ;
 deploy=release ;
+deploy=latest ;
 
 # TO DEPLOY THE APP
 rm -rf proxy2aws ;
