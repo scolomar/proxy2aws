@@ -30,6 +30,10 @@ The EC2 machines do not have any open port accessible from outside.
 
 We will use AWS Systems Manager to connect and maintain the EC2 machines without the need of any bastion or breaking the isolation.
 
+You might need the following information if you want to connect to the machines via SSH:
+* https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started-enable-ssh-connections.html
+* https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html#install-plugin-linux
+
 Here follow the links to the CloudFormation templates that define the infrastructure (you can choose to use HTTP, HTTPS or a mix of both):
 * https://github.com/secobau/proxy2aws/tree/master/AWS/AMI
 
