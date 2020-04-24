@@ -95,6 +95,10 @@ export stack=$stack                                     \
 
 ```
 
+The services will be available at the following URLs:
+* https://aws2cloud.sebastian-colomar.com
+* https://aws2prem.sebastian-colomar.com
+
 After the deployment is finished it is a good idea to remove the Docker Configs and Secrets from the disk of the Manager:
 
 ```BASH
@@ -109,10 +113,6 @@ export stack=$stack                                     \
 
 
 ```
-
-The services will be available at the following URLs:
-* https://aws2cloud.sebastian-colomar.com
-* https://aws2prem.sebastian-colomar.com
 
 Once you are finished you can remove the containers with the following script:
 
