@@ -8,7 +8,7 @@ services:
  aws2prem:
   image: "secobau/proxy2aws:release-3.0"
   ports:
-   - "8080:80"
+   - "30001:80"
   volumes:
    - aws2prem:/var/log/nginx
   secrets:

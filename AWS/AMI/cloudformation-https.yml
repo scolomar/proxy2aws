@@ -229,13 +229,13 @@ Parameters:
     Type: String
     
   PortTargetGroupWorker1:
-    Default: 8080
+    Default: 30001
     Description: >
       The internal listening port for Target Group Worker 1.
     Type: Number
     
   PortTargetGroupWorker2:
-    Default: 8888
+    Default: 30002
     Description: >
       The internal listening port for Target Group Worker 2.
     Type: Number
