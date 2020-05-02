@@ -6,7 +6,7 @@
 version: '3.7'
 services:
  aws2prem:
-  image: "secobau/proxy2aws:latest"
+  image: "secobau/proxy2aws"
   ports:
    - "30001:80"
   volumes:
