@@ -19,20 +19,19 @@ spec:
     spec:
       containers:
       - name: aws2prem
-        image: secobau/proxy2aws:latest
+        image: secobau/proxy2aws
         volumeMounts:
         - name: aws2prem-logs
           mountPath: /var/log/nginx
-        - name: aws2prem-secret
+        - name: aws2prem-conf
           mountPath: /run/secrets/etc/nginx/conf.d
           readOnly: true
       volumes:
       - name: aws2prem-logs
         emptyDir: {}
-      - name: aws2prem-secret
+      - name: aws2prem-conf
         secret:
-          secretName: aws2prem
-# kubectl create secret generic aws2prem --from-file aws2prem.conf
+          secretName: aws2prem.conf
 ---
 apiVersion: v1
 kind: Service
@@ -46,3 +45,7 @@ spec:
     service: aws2prem
   type: NodePort
 ---
+###############################################################################
+# kubectl create secret generic aws2prem.conf --from-file aws2prem.conf       ;
+# kubectl apply -f aws2prem.yaml                                              ;
+###############################################################################

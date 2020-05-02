@@ -19,27 +19,25 @@ spec:
     spec:
       containers:
       - name: aws2cloud
-        image: secobau/proxy2aws:latest
+        image: secobau/proxy2aws
         volumeMounts:
         - name: aws2cloud-logs
           mountPath: /var/log/nginx
-        - name: aws2cloud-config
+        - name: aws2cloud-conf
           mountPath: /run/secrets/etc/nginx/conf.d
           readOnly: true
-        - name: aws2cloud-secret
+        - name: aws2cloud-htpasswd
           mountPath: /run/secrets/etc/nginx
           readOnly: true
       volumes:
       - name: aws2cloud-logs
         emptyDir: {}
-      - name: aws2cloud-config
+      - name: aws2cloud-conf
         configMap:
-          name: aws2cloud
-# kubectl create configmap aws2cloud --from-file aws2cloud.conf
-      - name: aws2cloud-secret
+          name: aws2cloud.conf
+      - name: aws2cloud-htpasswd
         secret:
-          secretName: aws2cloud
-# kubectl create secret generic aws2cloud --from-file aws2cloud.htpasswd
+          secretName: aws2cloud.htpasswd
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -57,20 +55,19 @@ spec:
     spec:
       containers:
       - name: cloud2instance
-        image: secobau/proxy2aws:latest
+        image: secobau/proxy2aws
         volumeMounts:
         - name: cloud2instance-logs
           mountPath: /var/log/nginx
-        - name: cloud2instance-secret
+        - name: cloud2instance-conf
           mountPath: /run/secrets/etc/nginx/conf.d
           readOnly: true
       volumes:
       - name: cloud2instance-logs
         emptyDir: {}
-      - name: cloud2instance-secret
+      - name: cloud2instance-conf
         secret:
-          secretName: cloud2instance
-# kubectl create secret generic cloud2instance --from-file cloud2instance.conf
+          secretName: cloud2instance.conf
 ---
 apiVersion: v1
 kind: Service
@@ -94,3 +91,9 @@ spec:
   selector:
     service: cloud2instance
 ---
+###############################################################################
+# f=aws2cloud.conf && kubectl create configmap $f --from-file $f              ;
+# f=aws2cloud.htpasswd && kubectl create secret generic $f --from-file $f     ;
+# f=cloud2instance.conf && kubectl create secret generic $f --from-file $f    ;
+# kubectl apply -f aws2cloud.yaml                                             ;
+###############################################################################
