@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: aws2cloud
-        image: secobau/proxy2aws
+        image: secobau/proxy2aws:latest
         volumeMounts:
         - name: aws2cloud-logs
           mountPath: /var/log/nginx
@@ -55,7 +55,7 @@ spec:
     spec:
       containers:
       - name: cloud2instance
-        image: secobau/proxy2aws
+        image: secobau/proxy2aws:latest
         volumeMounts:
         - name: cloud2instance-logs
           mountPath: /var/log/nginx
