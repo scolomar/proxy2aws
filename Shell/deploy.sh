@@ -28,13 +28,13 @@ for target in $targets ; do
  send_command "$command" "$target" "$stack" ;
 done ;
 
-command=" sudo docker stack deploy --compose-file proxy2aws/Swarm/$deploy/aws2cloud.yml aws2cloud " ;
+command=" sudo docker stack deploy --compose-file proxy2aws/Swarm/$deploy/aws2cloud.yaml aws2cloud " ;
 targets=" InstanceManager1 " ;
 for target in $targets ; do
  send_list_command "$command" "$target" "$stack" ;
 done ;
 
-command=" sudo docker stack deploy --compose-file proxy2aws/Swarm/$deploy/aws2prem.yml aws2prem " ;
+command=" sudo docker stack deploy --compose-file proxy2aws/Swarm/$deploy/aws2prem.yaml aws2prem " ;
 targets=" InstanceManager1 " ;
 for target in $targets ; do
  send_list_command "$command" "$target" "$stack" ;
