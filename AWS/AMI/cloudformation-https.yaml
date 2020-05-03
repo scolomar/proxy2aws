@@ -35,9 +35,13 @@ Metadata:
           - IpProtocolListenerWorker1
           - IpProtocolListenerWorker2
           - PortListenerWorker1
+          - PortListenerWorker1QA
           - PortListenerWorker2
-          - PortTargetGroupWorker1
-          - PortTargetGroupWorker2
+          - PortListenerWorker2QA
+          - PortTargetGroupWorker1A
+          - PortTargetGroupWorker1B
+          - PortTargetGroupWorker2A
+          - PortTargetGroupWorker2B
           - ProtocolListenerWorker1
           - ProtocolListenerWorker2
           - ProtocolTargetGroupWorker1
@@ -81,12 +85,20 @@ Metadata:
         default: The name of the key pair
       PortListenerWorker1:
         default: The listening port for Listener Worker 1
+      PortListenerWorker1QA:
+        default: The listening port for Listener Worker 1 - QA
       PortListenerWorker2:
         default: The listening port for Listener Worker 2
-      PortTargetGroupWorker1:
-        default: The internal listening port for Target Group Worker 1
-      PortTargetGroupWorker2:
-        default: The internal listening port for Target Group Worker 2
+      PortListenerWorker2QA:
+        default: The listening port for Listener Worker 2 - QA
+      PortTargetGroupWorker1A:
+        default: The internal listening port for Target Group Worker 1 - A deployment
+      PortTargetGroupWorker1B:
+        default: The internal listening port for Target Group Worker 1 - B deployment
+      PortTargetGroupWorker2A:
+        default: The internal listening port for Target Group Worker 2 - A deployment
+      PortTargetGroupWorker2B:
+        default: The internal listening port for Target Group Worker 2 - B deployment
       ProtocolListenerWorker1:
         default: The protocol for Listener Worker 1
       ProtocolListenerWorker2:
@@ -216,6 +228,18 @@ Parameters:
       The listening port for Listener Worker 2.
     Type: Number
     
+  PortListenerWorker1QA:
+    Default: 8443
+    Description: >
+      The listening port for Listener Worker 1 - QA.
+    Type: Number
+    
+  PortListenerWorker2QA:
+    Default: 8443
+    Description: >
+      The listening port for Listener Worker 2 - QA.
+    Type: Number
+    
   ProtocolListenerWorker1:
     Default: HTTPS
     Description: >
@@ -228,16 +252,28 @@ Parameters:
       The protocol for Listener Worker 2.
     Type: String
     
-  PortTargetGroupWorker1:
+  PortTargetGroupWorker1A:
     Default: 30001
     Description: >
-      The internal listening port for Target Group Worker 1.
+      The internal listening port for Target Group Worker 1 - A deployment.
     Type: Number
     
-  PortTargetGroupWorker2:
+  PortTargetGroupWorker1B:
+    Default: 31001
+    Description: >
+      The internal listening port for Target Group Worker 1 - B deployment.
+    Type: Number
+    
+  PortTargetGroupWorker2A
     Default: 30002
     Description: >
-      The internal listening port for Target Group Worker 2.
+      The internal listening port for Target Group Worker 2 - A deployment.
+    Type: Number
+    
+  PortTargetGroupWorker2B:
+    Default: 31002
+    Description: >
+      The internal listening port for Target Group Worker 2 - B deployment.
     Type: Number
     
   ProtocolTargetGroupWorker1:
@@ -451,10 +487,22 @@ Resources:
       Certificates:
         - CertificateArn: !Sub 'arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${Identifier}'
       DefaultActions: 
-        - TargetGroupArn: !Ref TargetGroupWorker1
+        - TargetGroupArn: !Ref TargetGroupWorker1A
           Type: forward
       LoadBalancerArn: !Ref LoadBalancerWorker1
       Port: !Ref PortListenerWorker1
+      Protocol: !Ref ProtocolListenerWorker1
+    Type: AWS::ElasticLoadBalancingV2::Listener
+ 
+  ListenerWorker1QA:
+    Properties: 
+      Certificates:
+        - CertificateArn: !Sub 'arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${Identifier}'
+      DefaultActions: 
+        - TargetGroupArn: !Ref TargetGroupWorker1B
+          Type: forward
+      LoadBalancerArn: !Ref LoadBalancerWorker1
+      Port: !Ref PortListenerWorker1QA
       Protocol: !Ref ProtocolListenerWorker1
     Type: AWS::ElasticLoadBalancingV2::Listener
  
@@ -463,10 +511,22 @@ Resources:
       Certificates:
         - CertificateArn: !Sub 'arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${Identifier}'
       DefaultActions: 
-        - TargetGroupArn: !Ref TargetGroupWorker2
+        - TargetGroupArn: !Ref TargetGroupWorker2A
           Type: forward
       LoadBalancerArn: !Ref LoadBalancerWorker2
       Port: !Ref PortListenerWorker2
+      Protocol: !Ref ProtocolListenerWorker2
+    Type: AWS::ElasticLoadBalancingV2::Listener
+ 
+  ListenerWorker2QA:
+    Properties: 
+      Certificates:
+        - CertificateArn: !Sub 'arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${Identifier}'
+      DefaultActions: 
+        - TargetGroupArn: !Ref TargetGroupWorker2B
+          Type: forward
+      LoadBalancerArn: !Ref LoadBalancerWorker2
+      Port: !Ref PortListenerWorker2QA
       Protocol: !Ref ProtocolListenerWorker2
     Type: AWS::ElasticLoadBalancingV2::Listener
  
@@ -475,6 +535,7 @@ Resources:
       SecurityGroups:
         - !GetAtt VPC.DefaultSecurityGroup
         - !Ref SecurityGroupWorker1
+        - !Ref SecurityGroupWorker1QA
       Subnets: 
         - !Ref SubnetPublic1
         - !Ref SubnetPublic2
@@ -486,6 +547,7 @@ Resources:
       SecurityGroups:
         - !GetAtt VPC.DefaultSecurityGroup
         - !Ref SecurityGroupWorker2
+        - !Ref SecurityGroupWorker2QA
       Subnets: 
         - !Ref SubnetPublic1
         - !Ref SubnetPublic2
@@ -610,6 +672,18 @@ Resources:
       VpcId: !Ref VPC
     Type: AWS::EC2::SecurityGroup
       
+  SecurityGroupWorker1QA:
+    Properties:
+      GroupDescription: Allow access to the applications running on the cluster of workers for Service 1 - QA
+      SecurityGroupIngress:
+      - 
+        CidrIp: !Ref SecurityGroupCidrIpWorker1
+        FromPort: !Ref PortListenerWorker1QA
+        IpProtocol: !Ref IpProtocolListenerWorker1
+        ToPort: !Ref PortListenerWorker1QA
+      VpcId: !Ref VPC
+    Type: AWS::EC2::SecurityGroup
+      
   SecurityGroupWorker2:
     Properties:
       GroupDescription: Allow access to the applications running on the cluster of workers for Service 2
@@ -619,6 +693,18 @@ Resources:
         FromPort: !Ref PortListenerWorker2
         IpProtocol: !Ref IpProtocolListenerWorker2
         ToPort: !Ref PortListenerWorker2
+      VpcId: !Ref VPC
+    Type: AWS::EC2::SecurityGroup
+      
+  SecurityGroupWorker2QA:
+    Properties:
+      GroupDescription: Allow access to the applications running on the cluster of workers for Service 2 - QA
+      SecurityGroupIngress:
+      - 
+        CidrIp: !Ref SecurityGroupCidrIpWorker2
+        FromPort: !Ref PortListenerWorker2QA
+        IpProtocol: !Ref IpProtocolListenerWorker2
+        ToPort: !Ref PortListenerWorker2QA
       VpcId: !Ref VPC
     Type: AWS::EC2::SecurityGroup
       
@@ -718,9 +804,9 @@ Resources:
       SubnetId: !Ref SubnetPublic3
     Type: AWS::EC2::SubnetRouteTableAssociation
 
-  TargetGroupWorker1:
+  TargetGroupWorker1A:
     Properties: 
-      Port: !Ref PortTargetGroupWorker1
+      Port: !Ref PortTargetGroupWorker1A
       Protocol: !Ref ProtocolTargetGroupWorker1
       Targets: 
         -   Id: !Ref InstanceWorker1
@@ -730,9 +816,33 @@ Resources:
       VpcId: !Ref VPC
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
 
-  TargetGroupWorker2:
+  TargetGroupWorker1B:
     Properties: 
-      Port: !Ref PortTargetGroupWorker2
+      Port: !Ref PortTargetGroupWorker1B
+      Protocol: !Ref ProtocolTargetGroupWorker1
+      Targets: 
+        -   Id: !Ref InstanceWorker1
+        -   Id: !Ref InstanceWorker2
+        -   Id: !Ref InstanceWorker3
+      TargetType: instance
+      VpcId: !Ref VPC
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+
+  TargetGroupWorker2A:
+    Properties: 
+      Port: !Ref PortTargetGroupWorker2A
+      Protocol: !Ref ProtocolTargetGroupWorker2
+      Targets: 
+        -   Id: !Ref InstanceWorker1
+        -   Id: !Ref InstanceWorker2
+        -   Id: !Ref InstanceWorker3
+      TargetType: instance
+      VpcId: !Ref VPC
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+
+  TargetGroupWorker2B:
+    Properties: 
+      Port: !Ref PortTargetGroupWorker2B
       Protocol: !Ref ProtocolTargetGroupWorker2
       Targets: 
         -   Id: !Ref InstanceWorker1
