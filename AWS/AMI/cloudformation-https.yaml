@@ -32,16 +32,22 @@ Metadata:
           default: Network Configuration
         Parameters:
           - HostedZoneName
+          - IpProtocolListenerManagerKube
           - IpProtocolListenerWorker1
           - IpProtocolListenerWorker2
+          - PortListenerManagerKube
           - PortListenerWorker1
           - PortListenerWorker2
+          - PortTargetGroupManagerKube
           - PortTargetGroupWorker1
           - PortTargetGroupWorker2
+          - ProtocolListenerManagerKube
           - ProtocolListenerWorker1
           - ProtocolListenerWorker2
+          - ProtocolTargetGroupManagerKube
           - ProtocolTargetGroupWorker1
           - ProtocolTargetGroupWorker2
+          - RecordSetNameKube
           - RecordSetName1
           - RecordSetName2
           - SecurityGroupCidrIpWorker1
@@ -73,28 +79,40 @@ Metadata:
         default: AMI to use for Cluster Worker Instances
       InstanceWorkerInstanceType:
         default: Cluster Worker Instance Size
+      IpProtocolListenerManagerKube:
+        default: The IP protocol for Listener Manager Kubernetes API Server
       IpProtocolListenerWorker1:
         default: The IP protocol for Listener Worker 1
       IpProtocolListenerWorker2:
         default: The IP protocol for Listener Worker 2
       KeyName:
         default: The name of the key pair
+      PortListenerManagerKube:
+        default: The listening port for Listener Manager Kubernetes API Server
       PortListenerWorker1:
         default: The listening port for Listener Worker 1
       PortListenerWorker2:
         default: The listening port for Listener Worker 2
+      PortTargetGroupManagerKube:
+        default: The internal listening port for Target Group Manager Kubernetes API Server
       PortTargetGroupWorker1:
         default: The internal listening port for Target Group Worker 1
       PortTargetGroupWorker2:
         default: The internal listening port for Target Group Worker 2
+      ProtocolListenerManagerKube:
+        default: The protocol for Listener Manager Kubernetes API Server
       ProtocolListenerWorker1:
         default: The protocol for Listener Worker 1
       ProtocolListenerWorker2:
         default: The protocol for Listener Worker 2
+      ProtocolTargetGroupManagerKube:
+        default: The internal protocol for Target Group Manager Kubernetes API Server
       ProtocolTargetGroupWorker1:
         default: The internal protocol for Target Group Worker 1
       ProtocolTargetGroupWorker2:
         default: The internal protocol for Target Group Worker 2
+      RecordSetNameKube:
+        default: The name of the Record Set for Kubernetes API Server
       RecordSetName1:
         default: The name of the Record Set for service 1
       RecordSetName2:
@@ -186,6 +204,12 @@ Parameters:
       Select Amazon EC2 instance type for the Cluster Worker instances.
     Type: String
     
+  IpProtocolListenerManagerKube:
+    Default: tcp
+    Description: >
+      The IP protocol for Listener Manager Kubernetes API Server.
+    Type: String
+    
   IpProtocolListenerWorker1:
     Default: tcp
     Description: >
@@ -204,6 +228,12 @@ Parameters:
       The name of the key pair. You can create a key pair using CreateKeyPair or ImportKeyPair.
     Type: String
     
+  PortListenerManagerKube:
+    Default: 6443
+    Description: >
+      The listening port for Listener Manager Kubernetes API Server.
+    Type: Number
+    
   PortListenerWorker1:
     Default: 443
     Description: >
@@ -215,6 +245,12 @@ Parameters:
     Description: >
       The listening port for Listener Worker 2.
     Type: Number
+    
+  ProtocolListenerManagerKube:
+    Default: TCP
+    Description: >
+      The protocol for Listener Manager Kubernetes API Server.
+    Type: String
     
   ProtocolListenerWorker1:
     Default: HTTPS
@@ -228,6 +264,12 @@ Parameters:
       The protocol for Listener Worker 2.
     Type: String
     
+  PortTargetGroupManagerKube:
+    Default: 6443
+    Description: >
+      The internal listening port for Target Group Manager Kubernetes API Server.
+    Type: Number
+    
   PortTargetGroupWorker1:
     Default: 30001
     Description: >
@@ -240,6 +282,12 @@ Parameters:
       The internal listening port for Target Group Worker 2.
     Type: Number
     
+  ProtocolTargetGroupManagerKube:
+    Default: TCP
+    Description: >
+      The internal protocol for Target Group Manager Kubernetes API Server.
+    Type: String
+    
   ProtocolTargetGroupWorker1:
     Default: HTTP
     Description: >
@@ -250,6 +298,12 @@ Parameters:
     Default: HTTP
     Description: >
       The internal protocol for Target Group Worker 2.
+    Type: String
+    
+  RecordSetNameKube:
+    Default: kube-apiserver
+    Description: >
+      The name of the Record Set for service 1.
     Type: String
     
   RecordSetName1:
@@ -446,6 +500,18 @@ Resources:
   InternetGateway:
     Type: AWS::EC2::InternetGateway
 
+  ListenerManagerKube:
+    Properties: 
+      Certificates:
+        - CertificateArn: !Sub 'arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${Identifier}'
+      DefaultActions: 
+        - TargetGroupArn: !Ref TargetGroupManagerKube
+          Type: forward
+      LoadBalancerArn: !Ref LoadBalancerManagerKube
+      Port: !Ref PortListenerManagerKube
+      Protocol: !Ref ProtocolListenerManagerKube
+    Type: AWS::ElasticLoadBalancingV2::Listener
+ 
   ListenerWorker1:
     Properties: 
       Certificates:
@@ -470,6 +536,17 @@ Resources:
       Protocol: !Ref ProtocolListenerWorker2
     Type: AWS::ElasticLoadBalancingV2::Listener
  
+  LoadBalancerManagerKube:
+    Properties: 
+      SecurityGroups:
+        - !GetAtt VPC.DefaultSecurityGroup
+      Subnets: 
+        - !Ref SubnetPrivate1
+        - !Ref SubnetPrivate2
+        - !Ref SubnetPrivate3
+      Type: network
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+        
   LoadBalancerWorker1:
     Properties: 
       SecurityGroups:
@@ -513,6 +590,16 @@ Resources:
       SubnetId: !Ref SubnetPublic3
     Type: AWS::EC2::NatGateway
 
+  RecordSetKube:
+    Properties: 
+      AliasTarget: 
+        DNSName: !GetAtt LoadBalancerManagerKube.DNSName
+        HostedZoneId: !GetAtt LoadBalancerManagerKube.CanonicalHostedZoneID
+      HostedZoneName: !Sub '${HostedZoneName}.'
+      Name: !Sub '${RecordSetNameKube}.${HostedZoneName}'
+      Type: A
+    Type: AWS::Route53::RecordSet
+      
   RecordSet1:
     Properties: 
       AliasTarget: 
@@ -717,6 +804,18 @@ Resources:
       RouteTableId: !Ref RouteTablePublic
       SubnetId: !Ref SubnetPublic3
     Type: AWS::EC2::SubnetRouteTableAssociation
+
+  TargetGroupManagerKube:
+    Properties: 
+      Port: !Ref PortTargetGroupManagerKube
+      Protocol: !Ref ProtocolTargetGroupManagerKube
+      Targets: 
+        -   Id: !Ref InstanceManager1
+        -   Id: !Ref InstanceManager2
+        -   Id: !Ref InstanceManager3
+      TargetType: instance
+      VpcId: !Ref VPC
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
 
   TargetGroupWorker1:
     Properties: 
