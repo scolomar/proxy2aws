@@ -502,8 +502,6 @@ Resources:
 
   ListenerManagerKube:
     Properties: 
-      Certificates:
-        - CertificateArn: !Sub 'arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${Identifier}'
       DefaultActions: 
         - TargetGroupArn: !Ref TargetGroupManagerKube
           Type: forward
@@ -538,8 +536,6 @@ Resources:
  
   LoadBalancerManagerKube:
     Properties: 
-      SecurityGroups:
-        - !GetAtt VPC.DefaultSecurityGroup
       Subnets: 
         - !Ref SubnetPrivate1
         - !Ref SubnetPrivate2
