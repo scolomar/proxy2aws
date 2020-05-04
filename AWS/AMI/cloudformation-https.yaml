@@ -696,7 +696,7 @@ Resources:
       GroupDescription: Allow access to the Kubernetes API Server running on Manager 1
       SecurityGroupIngress:
       - 
-        CidrIp: !Ref SubnetCidrBlockPrivate1
+        CidrIp: !Ref VPCCidrBlock
         FromPort: !Ref PortListenerKubeManager
         IpProtocol: !Ref IpProtocolListenerKubeManager
         ToPort: !Ref PortListenerKubeManager
@@ -708,7 +708,7 @@ Resources:
       GroupDescription: Allow access to the Kubernetes API Server running on Manager 2
       SecurityGroupIngress:
       - 
-        CidrIp: !Ref SubnetCidrBlockPrivate2
+        CidrIp: !Ref VPCCidrBlock
         FromPort: !Ref PortListenerKubeManager
         IpProtocol: !Ref IpProtocolListenerKubeManager
         ToPort: !Ref PortListenerKubeManager
@@ -720,7 +720,7 @@ Resources:
       GroupDescription: Allow access to the Kubernetes API Server running on Manager 3
       SecurityGroupIngress:
       - 
-        CidrIp: !Ref SubnetCidrBlockPrivate3
+        CidrIp: !Ref VPCCidrBlock
         FromPort: !Ref PortListenerKubeManager
         IpProtocol: !Ref IpProtocolListenerKubeManager
         ToPort: !Ref PortListenerKubeManager
