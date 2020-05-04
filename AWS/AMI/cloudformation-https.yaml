@@ -408,6 +408,9 @@ Resources:
       ImageId: !Ref InstanceManagerImageId
       InstanceType: !Ref InstanceManagerInstanceType
       KeyName: !Ref KeyName
+      SecurityGroupIds:
+        - !GetAtt VPC.DefaultSecurityGroup
+        - !Ref SecurityGroupKubeManager1
       SubnetId: !Ref SubnetPrivate1
       UserData:
         "Fn::Base64":
@@ -423,6 +426,9 @@ Resources:
       ImageId: !Ref InstanceManagerImageId
       InstanceType: !Ref InstanceManagerInstanceType
       KeyName: !Ref KeyName
+      SecurityGroupIds:
+        - !GetAtt VPC.DefaultSecurityGroup
+        - !Ref SecurityGroupKubeManager2
       SubnetId: !Ref SubnetPrivate2
       UserData:
         "Fn::Base64":
@@ -438,6 +444,9 @@ Resources:
       ImageId: !Ref InstanceManagerImageId
       InstanceType: !Ref InstanceManagerInstanceType
       KeyName: !Ref KeyName
+      SecurityGroupIds:
+        - !GetAtt VPC.DefaultSecurityGroup
+        - !Ref SecurityGroupKubeManager3
       SubnetId: !Ref SubnetPrivate3
       UserData:
         "Fn::Base64":
@@ -682,6 +691,42 @@ Resources:
       VpcId: !Ref VPC
     Type: AWS::EC2::RouteTable
 
+  SecurityGroupKubeManager1:
+    Properties:
+      GroupDescription: Allow access to the Kubernetes API Server running on Manager 1
+      SecurityGroupIngress:
+      - 
+        CidrIp: !Ref SubnetCidrBlockPrivate1
+        FromPort: !Ref PortListenerManagerKube
+        IpProtocol: !Ref IpProtocolListenerManagerKube
+        ToPort: !Ref PortListenerManagerKube
+      VpcId: !Ref VPC
+    Type: AWS::EC2::SecurityGroup
+      
+  SecurityGroupKubeManager2:
+    Properties:
+      GroupDescription: Allow access to the Kubernetes API Server running on Manager 2
+      SecurityGroupIngress:
+      - 
+        CidrIp: !Ref SubnetCidrBlockPrivate2
+        FromPort: !Ref PortListenerManagerKube
+        IpProtocol: !Ref IpProtocolListenerManagerKube
+        ToPort: !Ref PortListenerManagerKube
+      VpcId: !Ref VPC
+    Type: AWS::EC2::SecurityGroup
+      
+  SecurityGroupKubeManager3:
+    Properties:
+      GroupDescription: Allow access to the Kubernetes API Server running on Manager 3
+      SecurityGroupIngress:
+      - 
+        CidrIp: !Ref SubnetCidrBlockPrivate3
+        FromPort: !Ref PortListenerManagerKube
+        IpProtocol: !Ref IpProtocolListenerManagerKube
+        ToPort: !Ref PortListenerManagerKube
+      VpcId: !Ref VPC
+    Type: AWS::EC2::SecurityGroup
+      
   SecurityGroupWorker1:
     Properties:
       GroupDescription: Allow access to the applications running on the cluster of workers for Service 1
