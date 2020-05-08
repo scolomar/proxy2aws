@@ -41,6 +41,9 @@ Metadata:
           - PortTargetGroupKubeManager
           - PortTargetGroupWorker1
           - PortTargetGroupWorker2
+          - PrivateIpAddressInstanceManager1
+          - PrivateIpAddressInstanceManager2
+          - PrivateIpAddressInstanceManager3
           - ProtocolListenerKubeManager
           - ProtocolListenerWorker1
           - ProtocolListenerWorker2
@@ -99,6 +102,12 @@ Metadata:
         default: The internal listening port for Target Group Worker 1
       PortTargetGroupWorker2:
         default: The internal listening port for Target Group Worker 2
+      PrivateIpAddressInstanceManager1:
+        default: The private IP address for Manager 1
+      PrivateIpAddressInstanceManager2:
+        default: The private IP address for Manager 2
+      PrivateIpAddressInstanceManager3:
+        default: The private IP address for Manager 3
       ProtocolListenerKubeManager:
         default: The protocol for Listener Manager Kubernetes API Server
       ProtocolListenerWorker1:
@@ -282,6 +291,24 @@ Parameters:
       The internal listening port for Target Group Worker 2.
     Type: Number
     
+  PrivateIpAddressInstanceManager1:
+    Default: 10.168.1.100
+    Description: >
+      The private IP address for Manager 1.
+    Type: String
+    
+  PrivateIpAddressInstanceManager2:
+    Default: 10.168.1.100
+    Description: >
+      The private IP address for Manager 2.
+    Type: String
+    
+  PrivateIpAddressInstanceManager3:
+    Default: 10.168.1.100
+    Description: >
+      The private IP address for Manager 3.
+    Type: String
+    
   ProtocolTargetGroupKubeManager:
     Default: TCP
     Description: >
@@ -408,6 +435,7 @@ Resources:
       ImageId: !Ref InstanceManagerImageId
       InstanceType: !Ref InstanceManagerInstanceType
       KeyName: !Ref KeyName
+      PrivateIpAddress: !Ref PrivateIpAddressInstanceManager1
       SecurityGroupIds:
         - !GetAtt VPC.DefaultSecurityGroup
         - !Ref SecurityGroupKubeManager1
@@ -426,6 +454,7 @@ Resources:
       ImageId: !Ref InstanceManagerImageId
       InstanceType: !Ref InstanceManagerInstanceType
       KeyName: !Ref KeyName
+      PrivateIpAddress: !Ref PrivateIpAddressInstanceManager2
       SecurityGroupIds:
         - !GetAtt VPC.DefaultSecurityGroup
         - !Ref SecurityGroupKubeManager2
@@ -444,6 +473,7 @@ Resources:
       ImageId: !Ref InstanceManagerImageId
       InstanceType: !Ref InstanceManagerInstanceType
       KeyName: !Ref KeyName
+      PrivateIpAddress: !Ref PrivateIpAddressInstanceManager3
       SecurityGroupIds:
         - !GetAtt VPC.DefaultSecurityGroup
         - !Ref SecurityGroupKubeManager3
