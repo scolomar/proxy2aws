@@ -19,13 +19,27 @@ repo=https://raw.githubusercontent.com/secobau/proxy2aws/master/etc/yum.repos.d/
 file=$( basename $repo );
 
 command="wget $repo && sudo mv $file /etc/yum.repos.d/";
-targets=" InstanceManager1 " ;
+targets="								\
+	InstanceManager1						\
+	InstanceManager2						\
+	InstanceManager3						\
+	InstanceWorker1							\
+	InstanceWorker2							\
+	InstanceWorker3							\
+"									;
 for target in $targets ; do
  send_command "$command" "$target" "$stack" ;
 done ;
 
 command="ls -l /etc/yum.repos.d/$file " ;
-targets=" InstanceManager1 " ;
+targets="								\
+	InstanceManager1						\
+	InstanceManager2						\
+	InstanceManager3						\
+	InstanceWorker1							\
+	InstanceWorker2							\
+	InstanceWorker3							\
+"									;
 for target in $targets ; do
  send_list_command "$command" "$target" "$stack" ;
 done ;
