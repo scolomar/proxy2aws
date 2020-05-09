@@ -24,7 +24,7 @@ for target in $targets ; do
  send_command "$command" "$target" "$stack" ;
 done ;
 
-command="ls -l /etc/yum.repos.d/$repo " ;
+command="ls -l /etc/yum.repos.d/$file " ;
 targets=" InstanceManager1 " ;
 for target in $targets ; do
  send_list_command "$command" "$target" "$stack" ;
