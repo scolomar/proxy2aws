@@ -16,8 +16,9 @@ source docker/AWS/common/functions.sh ;
 rm --recursive --force docker ;
 
 repo=https://raw.githubusercontent.com/secobau/proxy2aws/master/etc/yum.repos.d/kubernetes.repo;
+file=$( basename $repo );
 
-command="wget $repo && sudo mv $repo /etc/yum.repos.d/"
+command="wget $repo && sudo mv $file /etc/yum.repos.d/";
 targets=" InstanceManager1 " ;
 for target in $targets ; do
  send_command "$command" "$target" "$stack" ;
