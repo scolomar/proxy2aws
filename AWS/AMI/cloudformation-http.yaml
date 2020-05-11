@@ -590,9 +590,9 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties: 
       HealthCheckPath: /
-      HealthCheckPort: 30001
+      HealthCheckPort: 30002
       HealthCheckProtocol: HTTP
-      Port: 30001
+      Port: 30002
       Protocol: HTTP
       Targets: 
         -   Id: !Ref InstanceWorker1
@@ -605,9 +605,9 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties: 
       HealthCheckPath: /
-      HealthCheckPort: 30002
+      HealthCheckPort: 30001
       HealthCheckProtocol: HTTP
-      Port: 30002
+      Port: 30001
       Protocol: HTTP
       Targets: 
         -   Id: !Ref InstanceWorker1
