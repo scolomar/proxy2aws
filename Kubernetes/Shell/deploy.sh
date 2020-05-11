@@ -68,13 +68,13 @@ for target in $targets ; do
  send_command "$command" "$target" "$stack" ;
 done ;
 
-command=" sudo kubectl apply --filename proxy2aws/Kubernetes/$deploy/aws2cloud.yaml ";
+command=" sudo kubectl apply --filename proxy2aws/Kubernetes/$deploy/aws2cloud.yaml --kubeconfig /etc/kubernetes/admin.conf ";
 targets=" InstanceManager1 " ;
 for target in $targets ; do
  send_list_command "$command" "$target" "$stack" ;
 done ;
 
-command=" sudo kubectl apply --filename proxy2aws/Kubernetes/$deploy/aws2prem.yaml ";
+command=" sudo kubectl apply --filename proxy2aws/Kubernetes/$deploy/aws2prem.yaml --kubeconfig /etc/kubernetes/admin.conf ";
 targets=" InstanceManager1 " ;
 for target in $targets ; do
  send_list_command "$command" "$target" "$stack" ;
