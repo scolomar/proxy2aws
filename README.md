@@ -39,6 +39,6 @@ You might need the following information if you want to connect to the machines 
 * https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started-enable-ssh-connections.html
 * https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html#install-plugin-linux
 
-Now you have to ways to deploy your application. Please follow the links below depending on the orchestrator of your choice: 
+Now you have two ways to deploy your application. Please follow the links below depending on the orchestrator of your choice: 
 * Swarm: https://github.com/secobau/proxy2aws/tree/master/Swarm
 * Kubernetes: https://github.com/secobau/proxy2aws/tree/master/Kubernetes
