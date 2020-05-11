@@ -22,6 +22,10 @@ export stack=$stack                                     \
 
 ```
 
+Now you have two ways to deploy your application. Please follow the links below depending on the orchestrator of your choice:
+* Kubernetes: https://github.com/secobau/proxy2aws/tree/master/Kubernetes
+* Swarm: https://github.com/secobau/proxy2aws/tree/master/Swarm
+
 After the deployment is finished it is a good idea to remove the Configs and Secrets from the disk of the Manager:
 
 ```BASH
