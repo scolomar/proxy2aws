@@ -9,7 +9,7 @@ Before creating the infrastructure you will need a Hosted Zone in AWS Route53:
 ```bash
 
 # TO LIST THE EXISTING HOSTED ZONES
-aws route53 list-hosted-zones --output text ;
+aws route53 list-hosted-zones --output text 		;
 
 
 ```
@@ -19,7 +19,7 @@ In case you want to use HTTPS then you will also need a previously provisioned A
 ```bash
 
 # TO LIST THE EXISTING CERTIFICATES IN CASE YOU NEED HTTPS
-aws acm list-certificates --output text ;
+aws acm list-certificates --output text 		;
 
 
 ```
@@ -35,10 +35,42 @@ Here follow the links to the CloudFormation templates that define the infrastruc
 
 After you have successfully deployed the infrastructure in AWS you will create a Cloud9 instance to access your infrastructure with AWS Systems Manager.
 
-You might need the following information if you want to connect to the machines via SSH (not necessary in principle):
+You might need the following information if you want to connect to the machines via SSH (but it is not necessary in principle):
 * https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started-enable-ssh-connections.html
 * https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html#install-plugin-linux
 
-Now you have two ways to deploy your application. Please follow the links below depending on the orchestrator of your choice: 
+You will need a set of Configs and Secrets to set up the configuration of the application.
+
+You can deploy the following samples instead of creating your own configuration:
+
+```BASH
+
+# IN CASE YOU NEED TO DEPLOY THE SAMPLE CONFIG FILES
+rm -rf proxy2aws					;
+export stack=$stack                                     \
+  && git clone https://github.com/secobau/proxy2aws.git \
+  && chmod +x proxy2aws/Shell/deploy-config.sh  	\
+  && ./proxy2aws/Shell/deploy-config.sh             	\
+  && rm -rf proxy2aws					;
+
+
+```
+
+After the deployment is finished it is a good idea to remove the Docker Configs and Secrets from the disk of the Manager:
+
+```BASH
+
+# TO REMOVE THE CONFIGS AND SECRETS FROM DISK
+rm -rf proxy2aws 					;
+ export stack=$stack                                    \
+  && git clone https://github.com/secobau/proxy2aws.git \
+  && chmod +x proxy2aws/Shell/remove-config.sh 		\
+  && ./proxy2aws/Shell/remove-config.sh        		\
+  && rm -rf proxy2aws 					;
+
+
+```
+
+You have two ways to deploy your application. Please follow the links below depending on the orchestrator of your choice: 
 * Swarm: https://github.com/secobau/proxy2aws/tree/master/Swarm
 * Kubernetes: https://github.com/secobau/proxy2aws/tree/master/Kubernetes

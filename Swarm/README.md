@@ -16,23 +16,6 @@ export stack=$stack                                     \
 
 ```
 
-You will need a set of Docker Configs and Secrets to set up the configuration of the application.
-
-You can deploy the following samples instead of creating your own configuration:
-
-```BASH
-
-# IN CASE YOU NEED TO DEPLOY THE SAMPLE CONFIG FILES
-rm -rf proxy2aws ;
-export stack=$stack                                     \
-  && git clone https://github.com/secobau/proxy2aws.git \
-  && chmod +x proxy2aws/Swarm/Shell/deploy-config.sh          \
-  && ./proxy2aws/Swarm/Shell/deploy-config.sh                 \
-  && rm -rf proxy2aws ;
-
-
-```
-
 Now you will deploy the application. The Docker images are hosted in Docker Hub:
 * https://hub.docker.com/r/secobau/proxy2aws
 
@@ -59,21 +42,6 @@ export stack=$stack                                     \
 The services will be available at the following URLs:
 * https://aws2cloud.sebastian-colomar.com
 * https://aws2prem.sebastian-colomar.com
-
-After the deployment is finished it is a good idea to remove the Docker Configs and Secrets from the disk of the Manager:
-
-```BASH
-
-# TO REMOVE THE CONFIGS AND SECRETS FROM DISK
-rm -rf proxy2aws ;
-export stack=$stack                                     \
-  && git clone https://github.com/secobau/proxy2aws.git \
-  && chmod +x proxy2aws/Swarm/Shell/remove-config.sh          \
-  && ./proxy2aws/Swarm/Shell/remove-config.sh                 \
-  && rm -rf proxy2aws ;
-
-
-```
 
 Once you are finished you can remove the containers with the following script:
 
