@@ -28,8 +28,8 @@ for target in $targets ; do
  send_command "$command" "$target" "$stack" ;
 done ;
 
-apps=" aws2cloud aws2prem ";
 apps=" aws2cloud-BLUE aws2prem-BLUE ";
+apps=" aws2cloud aws2prem ";
 for app in $apps;
 do
   command=" sudo docker stack deploy --compose-file proxy2aws/Swarm/$deploy/$app.yaml $app ";
