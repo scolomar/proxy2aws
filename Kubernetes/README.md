@@ -32,8 +32,10 @@ Once you are finished you can remove the containers with the following script:
 ```BASH
 
 # TO REMOVE THE APP
+#debug=true							;
+#stack=docker							;
 rm -rf proxy2aws 						;
-export stack=$stack                                      	\
+export debug=$debug stack=$stack                                \
   && git clone https://github.com/secobau/proxy2aws.git 	\
   && chmod +x proxy2aws/Kubernetes/Shell/remove.sh       	\
   && ./proxy2aws/Kubernetes/Shell/remove.sh              	\
