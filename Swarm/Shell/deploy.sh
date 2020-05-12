@@ -28,17 +28,17 @@ for target in $targets ; do
  send_command "$command" "$target" "$stack" ;
 done ;
 
-command=" sudo docker stack deploy --compose-file proxy2aws/Swarm/$deploy/aws2cloud.yaml aws2cloud " ;
-targets=" InstanceManager1 " ;
-for target in $targets ; do
- send_list_command "$command" "$target" "$stack" ;
-done ;
-
-command=" sudo docker stack deploy --compose-file proxy2aws/Swarm/$deploy/aws2prem.yaml aws2prem " ;
-targets=" InstanceManager1 " ;
-for target in $targets ; do
- send_list_command "$command" "$target" "$stack" ;
-done ;
+apps=" aws2cloud aws2prem ";
+apps=" aws2cloud-BLUE aws2prem-BLUE ";
+for app in $apps;
+do
+  command=" sudo docker stack deploy --compose-file proxy2aws/Swarm/$deploy/$app.yaml $app ";
+  targets=" InstanceManager1 ";
+  for target in $targets;
+  do
+    send_list_command "$command" "$target" "$stack";
+  done;
+done;
 
 command=" sudo rm --recursive --force proxy2aws " ;
 targets=" InstanceManager1 " ;
