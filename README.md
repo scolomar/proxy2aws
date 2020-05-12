@@ -15,7 +15,7 @@ Once your infrastructure has been created you will need a set of Configs and Sec
 #debug=true						;
 #stack=docker						;
 rm -rf proxy2aws					;
-export stack=$stack debug=$debug                        \
+export debug=$debug stack=$stack 			\
   && git clone https://github.com/secobau/proxy2aws.git \
   && chmod +x proxy2aws/Shell/deploy-config.sh  	\
   && ./proxy2aws/Shell/deploy-config.sh             	\
@@ -34,7 +34,7 @@ After the deployment is finished it is a good idea to remove the Configs and Sec
 
 # TO REMOVE THE CONFIGS AND SECRETS FROM DISK
 rm -rf proxy2aws 					;
-export stack=$stack debug=$debug                        \
+export debug=$debug stack=$stack 			\
   && git clone https://github.com/secobau/proxy2aws.git \
   && chmod +x proxy2aws/Shell/remove-config.sh 		\
   && ./proxy2aws/Shell/remove-config.sh        		\
