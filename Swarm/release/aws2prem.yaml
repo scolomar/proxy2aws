@@ -16,7 +16,7 @@ services:
       target: etc/nginx/conf.d/aws2prem.conf
       mode: 0440
     deploy:
-      replicas: 6
+      replicas: 9
       restart_policy:
         condition: any
       placement:
