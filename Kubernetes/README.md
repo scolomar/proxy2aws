@@ -1,21 +1,3 @@
-Run the following commands to deploy a Kubernetes cluster consisting of three managers and three workers spread on three different Availability Zones:
-
-```BASH
-
-# SET THE VARIABLE NAME OF THE STACK CREATED IN CLOUDFORMATION
-stack=proxy2aws 						;
-
-# TO CREATE THE CLUSTER
-rm -rf docker 							;
-export stack=$stack                                    		\
-  && git clone https://github.com/secobau/docker.git   		\
-  && chmod +x docker/AWS/install/Kubernetes/cluster.sh 		\
-  && ./docker/AWS/install/Kubernetes/cluster.sh        		\
-  && rm -rf docker 						;
-
-
-```
-
 Now you will deploy the application. The Docker images are hosted in Docker Hub:
 * https://hub.docker.com/r/secobau/proxy2aws
 
@@ -28,8 +10,10 @@ deploy=release 							;
 deploy=latest 							;
 
 # TO DEPLOY THE APP
+#debug=true							;
+#stack=docker							;
 rm -rf proxy2aws 						;
-export stack=$stack                                       	\
+export debug=$debug stack=$stack                                \
   && export deploy=$deploy                                	\
   && git clone https://github.com/secobau/proxy2aws.git   	\
   && chmod +x proxy2aws/Kubernetes/Shell/deploy.sh        	\
