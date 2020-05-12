@@ -29,7 +29,7 @@ services:
         constraints:
         - node.role == worker
   cloud2instance:
-    image: "secobau/proxy2aws:release-3.0"
+    image: "secobau/proxy2aws:release-5.0"
     volumes:
     - cloud2instance:/var/log/nginx
     secrets:
@@ -45,7 +45,7 @@ services:
         - node.role == worker
 volumes:
   aws2cloud:
-    cloud2instance:
+  cloud2instance:
 configs:
   aws2cloud:
     file: /configs/etc/nginx/conf.d/aws2cloud.conf
