@@ -1,0 +1,51 @@
+#########################################################################
+#      Copyright (C) 2020        Sebastian Francisco Colomar Bauza      #
+#      SPDX-License-Identifier:  GPL-2.0-only                           #
+#########################################################################
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws2prem-BLUE
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      service: aws2prem-BLUE
+  template:
+    metadata:
+      labels:
+        service: aws2prem-BLUE
+    spec:
+      containers:
+      - name: aws2prem
+        image: secobau/proxy2aws:latest
+        volumeMounts:
+        - name: aws2prem-logs
+          mountPath: /var/log/nginx
+        - name: aws2prem-conf
+          mountPath: /run/secrets/etc/nginx/conf.d
+          readOnly: true
+      volumes:
+      - name: aws2prem-logs
+        emptyDir: {}
+      - name: aws2prem-conf
+        secret:
+          secretName: aws2prem.conf
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aws2prem-BLUE
+spec:
+  ports:
+  - port: 80
+    nodePort: 31002
+  selector:
+    service: aws2prem-BLUE
+  type: NodePort
+---
+###############################################################################
+# kubectl create secret generic aws2prem.conf --from-file aws2prem.conf       ;
+# kubectl apply -f aws2prem.yaml                                              ;
+###############################################################################
