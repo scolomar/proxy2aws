@@ -6,16 +6,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aws2prem-BLUE
+  name: aws2prem-blue
 spec:
   replicas: 0
   selector:
     matchLabels:
-      service: aws2prem-BLUE
+      service: aws2prem-blue
   template:
     metadata:
       labels:
-        service: aws2prem-BLUE
+        service: aws2prem-blue
     spec:
       containers:
       - name: aws2prem
@@ -36,13 +36,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: aws2prem-BLUE
+  name: aws2prem-blue
 spec:
   ports:
   - port: 80
     nodePort: 31002
   selector:
-    service: aws2prem-BLUE
+    service: aws2prem-blue
   type: NodePort
 ---
 ###############################################################################

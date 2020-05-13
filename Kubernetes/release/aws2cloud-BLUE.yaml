@@ -6,16 +6,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aws2cloud-BLUE
+  name: aws2cloud-blue
 spec:
   replicas: 0
   selector:
     matchLabels:
-      service: aws2cloud-BLUE
+      service: aws2cloud-blue
   template:
     metadata:
       labels:
-        service: aws2cloud-BLUE
+        service: aws2cloud-blue
     spec:
       containers:
       - name: aws2cloud
@@ -42,16 +42,16 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cloud2instance-BLUE
+  name: cloud2instance-blue
 spec:
   replicas: 0
   selector:
     matchLabels:
-      service: cloud2instance-BLUE
+      service: cloud2instance-blue
   template:
     metadata:
       labels:
-        service: cloud2instance-BLUE
+        service: cloud2instance-blue
     spec:
       containers:
       - name: cloud2instance
@@ -72,24 +72,24 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: aws2cloud-BLUE
+  name: aws2cloud-blue
 spec:
   ports:
   - port: 80
     nodePort: 31001
   selector:
-    service: aws2cloud-BLUE
+    service: aws2cloud-blue
   type: NodePort
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: cloud2instance-BLUE
+  name: cloud2instance-blue
 spec:
   ports:
   - port: 80
   selector:
-    service: cloud2instance-BLUE
+    service: cloud2instance-blue
 ---
 ###############################################################################
 # f=aws2cloud.conf && kubectl create configmap $f --from-file $f              ;
