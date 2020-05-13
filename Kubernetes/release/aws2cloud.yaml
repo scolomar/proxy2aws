@@ -8,7 +8,7 @@ kind: Deployment
 metadata:
   name: aws2cloud
 spec:
-  replicas: 4
+  replicas: 6
   selector:
     matchLabels:
       service: aws2cloud
@@ -44,7 +44,7 @@ kind: Deployment
 metadata:
   name: cloud2instance
 spec:
-  replicas: 4
+  replicas: 6
   selector:
     matchLabels:
       service: cloud2instance
