@@ -8,7 +8,7 @@ kind: Deployment
 metadata:
   name: aws2prem
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       service: aws2prem
