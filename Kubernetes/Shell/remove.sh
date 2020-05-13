@@ -62,8 +62,7 @@ for target in $targets ; do
   send_command "$command" "$target" "$stack" ;
 done ;
 
-apps=" aws2cloud-BLUE aws2prem-BLUE ";
-apps=" aws2cloud aws2prem ";
+apps=" aws2cloud aws2prem aws2cloud-BLUE aws2prem-BLUE ";
 folder=proxy2aws/Kubernetes/$deploy;
 for app in $apps;
 do
