@@ -15,8 +15,7 @@ git clone https://github.com/secobau/docker.git ;
 source docker/AWS/common/functions.sh ;
 rm --recursive --force docker ;
 
-apps=" aws2cloud aws2prem ";
-apps=" aws2cloud-BLUE aws2prem-BLUE ";
+apps=" aws2cloud aws2prem aws2cloud-BLUE aws2prem-BLUE ";
 for app in $apps;
 do
   command=' sudo docker stack rm $app ';
