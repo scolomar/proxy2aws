@@ -16,19 +16,31 @@ export stack=$stack							;
 #########################################################################
 set +x && test "$debug" = true && set -x				;
 #########################################################################
-git clone https://github.com/secobau/docker.git   			;
-chmod +x docker/AWS/install/AMI/deploy.sh				;
-./docker/AWS/install/AMI/deploy.sh					;
-chmod +x docker/AWS/install/$mode/cluster.sh 				;
-./docker/AWS/install/$mode/cluster.sh        				;
-rm --recursive --force docker 						;
+domain=raw.githubusercontent.com                                        ;
 #########################################################################
-git clone https://github.com/secobau/proxy2aws.git 			;
-chmod +x proxy2aws/Shell/deploy-config.sh				;
-./proxy2aws/Shell/deploy-config.sh					;
-chmod +x proxy2aws/$mode/Shell/deploy.sh           			;
-./proxy2aws/$mode/Shell/deploy.sh                  			;
-chmod +x proxy2aws/Shell/remove-config.sh 				;
-./proxy2aws/Shell/remove-config.sh        				;
-rm --recursive --force proxy2aws 					;
+path=secobau/docker/master/AWS/common                                   ;
+file=functions.sh                                                       ;
+curl -O https://$domain/$path/$file                                     ;
+source ./$file                                                          ;
+rm --force ./$file                                                      ;
+#########################################################################
+path=secobau/docker/master/AWS/install/AMI				;
+file=deploy.sh                                               		;
+exec_remote_file $domain $file $path				 	;
+#########################################################################
+path=secobau/docker/master/AWS/install/$mode				;
+file=cluster.sh                                               		;
+exec_remote_file $domain $file $path				 	;
+#########################################################################
+path=secobau/proxy2aws/master/Shell                                     ;
+file=deploy-config-ssm.sh                                               ;
+exec_remote_file $domain $file $path				 	;
+#########################################################################
+path=secobau/proxy2aws/master/$mode/Shell                               ;
+file=deploy-ssm.sh      	                                        ;
+exec_remote_file $domain $file $path				 	;
+#########################################################################
+path=secobau/proxy2aws/master/Shell                                     ;
+file=remove-config-ssm.sh                                               ;
+exec_remote_file $domain $file $path				 	;
 #########################################################################

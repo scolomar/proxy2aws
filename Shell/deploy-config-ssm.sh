@@ -10,13 +10,16 @@ set +x && test "$debug" = true && set -x 				;
 #########################################################################
 pwd=$( dirname $( readlink -f $0 ) ) 					;
 #########################################################################
-git clone https://github.com/secobau/proxy2aws.git proxy2aws		;
+domain=raw.githubusercontent.com                                        ;
 #########################################################################
-folders=" configs secrets " 						;
-for folder in $folders 							;
-do 									\
-  sudo cp --recursive --verbose proxy2aws/$folder / 		 	;
-done 									;
+file=functions.sh                                                       ;
+path=secobau/docker/master/AWS/common					;
+curl -O https://$domain/$path/$file                                     ;
+source ./$file                                                          ;
+rm --force ./$file							;
 #########################################################################
-sudo rm --recursive --force proxy2aws 		 			;
+file=deploy-config.sh                                                   ;
+path=secobau/proxy2aws/master/Shell					;
+targets=" InstanceManager1 " 						;
+exec_remote_file_targets $domain $file $path $stack "$targets"		;
 #########################################################################
