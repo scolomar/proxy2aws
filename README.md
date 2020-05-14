@@ -1,44 +1,47 @@
-This project consists of an NginX Reverse Proxy that will forward traffic from a cloud service to an internal service on premises and vice-versa.
-
+This project consists of an NginX Reverse Proxy that will forward traffic from a cloud service to an internal service on premises and vice-versa.  
 The connection between the proxy and the services is done through HTTPS with Basic Authentication.
 
 The proxy service is deployed in AWS on a production-grade highly available and secure infrastructure consisting of private and public subnets, NAT gateways, security groups and application load balancers in order to ensure the isolation and resilience of the different components.
 
-Please follow this link to create your infrastructure in AWS:
-* https://github.com/secobau/docker/tree/master/AWS/install
+Please follow the shell commands below to set up your infrastructure in AWS.
+You will be able to choose your orchestrator with the "mode" variable:
 
-Once your infrastructure has been created you will need a set of Configs and Secrets to set up the configuration of the application. You can deploy the following samples instead of creating your own configuration:
+```BASH 
 
-```BASH
-
-# IN CASE YOU NEED TO DEPLOY THE SAMPLE CONFIG FILES
-#debug=true						;
-#stack=docker						;
-rm -rf proxy2aws					;
-export debug=$debug stack=$stack 			\
-  && git clone https://github.com/secobau/proxy2aws.git \
-  && chmod +x proxy2aws/Shell/deploy-config.sh  	\
-  && ./proxy2aws/Shell/deploy-config.sh             	\
-  && rm -rf proxy2aws					;
-
-
-```
-
-Now you have two ways to deploy your application. Please follow the links below depending on the orchestrator of your choice:
-* Kubernetes: https://github.com/secobau/proxy2aws/tree/master/Kubernetes
-* Swarm: https://github.com/secobau/proxy2aws/tree/master/Swarm
-
-After the deployment is finished it is a good idea to remove the Configs and Secrets from the disk of the Manager:
-
-```BASH
-
-# TO REMOVE THE CONFIGS AND SECRETS FROM DISK
-rm -rf proxy2aws 					;
-export debug=$debug stack=$stack 			\
-  && git clone https://github.com/secobau/proxy2aws.git \
-  && chmod +x proxy2aws/Shell/remove-config.sh 		\
-  && ./proxy2aws/Shell/remove-config.sh        		\
-  && rm -rf proxy2aws 					;
+#########################################################################
+debug=false                                                     	;
+debug=true                                                     		;
+deploy=latest                                                   	;
+deploy=release                                                   	;
+HostedZoneName=example.com                                  	 	;
+HostedZoneName=sebastian-colomar.com                                   	;
+Identifier=c3f3310b-f4ed-4874-8849-bd5c2cfe001f                         ;
+mode=Kubernetes                                                       	;
+mode=Swarm                                                       	;
+RecordSetName1=service-1                                   		;
+RecordSetName2=service-2                                   		;
+RecordSetName3=service-3                                   		;
+s3domain=docker-aws.s3.ap-south-1.amazonaws.com				;
+stack=docker                                                     	;
+#########################################################################
+export debug								;
+export deploy								;
+export HostedZoneName							;
+export Identifier							;
+export mode								;
+export RecordSetName1							;
+export RecordSetName2							;
+export RecordSetName3							;
+export s3domain								;
+export stack								;
+#########################################################################
+domain=raw.githubusercontent.com					;
+path=secobau/proxy2aws/master/Shell					;
+file=deploy.sh								;
+curl -O https://$domain/$path/$file					;
+chmod +x ./$file							;
+./$file									;
+#########################################################################
 
 
 ```
