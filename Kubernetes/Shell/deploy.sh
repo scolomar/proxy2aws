@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/bin/bash -x
 #########################################################################
 #      Copyright (C) 2020        Sebastian Francisco Colomar Bauza      #
 #      SPDX-License-Identifier:  GPL-2.0-only                           #
 #########################################################################
-export debug								;
-export deploy								;
-export stack								;
+export debug=$debug							;
+export deploy=$deploy							;
+export stack=$stack							;
 #########################################################################
 set +x && test "$debug" = true && set -x 				;
 #########################################################################
