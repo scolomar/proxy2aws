@@ -40,7 +40,7 @@ path=secobau/proxy2aws/master/Shell					;
 file=deploy.sh								;
 curl -O https://$domain/$path/$file					;
 chmod +x ./$file							;
-./$file									;
+nohup ./$file								&
 #########################################################################
 
 
