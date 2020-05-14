@@ -18,7 +18,7 @@ rm --recursive --force docker 						;
 #########################################################################
 folders=" configs secrets " 						;
 for folder in $folders 							;
-do 									;
+do 									\
   command=" sudo rm --recursive --force --verbose /$folder ; " 		;
   targets=" InstanceManager1 " 						;
   for target in $targets 						;

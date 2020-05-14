@@ -30,7 +30,11 @@ command=" find proxy2aws " 						;
 targets=" InstanceManager1 " 						;
 for target in $targets 							;
 do 									\
-  send_command "$command" "$target" "$stack" 				;
+  echo "Waiting for $target to complete ..."				;
+  output="$(								\
+    send_list_command "$command" "$target" "$stack"			\
+  )"									;
+  echo $output								;
 done 									;
 #########################################################################
 apps=" aws2cloud aws2prem aws2cloud-BLUE aws2prem-BLUE "		;
