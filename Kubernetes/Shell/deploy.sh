@@ -8,8 +8,6 @@ export deploy=$deploy							;
 #########################################################################
 set +x && test "$debug" = true && set -x 				;
 #########################################################################
-pwd=$( dirname $( readlink -f $0 ) ) 					;
-#########################################################################
 apps=" aws2cloud aws2prem aws2cloud-BLUE aws2prem-BLUE "		;
 domain=raw.githubusercontent.com                                        ;
 kube=" --kubeconfig /etc/kubernetes/admin.conf "			;
