@@ -11,6 +11,7 @@ export mode								;
 export RecordSetName1							;
 export RecordSetName2							;
 export RecordSetName3							;
+export s3domain								;
 export stack								;
 #########################################################################
 set +x && test "$debug" = true && set -x				;
