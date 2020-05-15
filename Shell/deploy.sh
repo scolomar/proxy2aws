@@ -41,7 +41,7 @@ path=secobau/proxy2aws/master/Shell                                     ;
 exec_remote_file $domain $file $path				 	;
 #########################################################################
 file=deploy-ssm.sh      	                                        ;
-path=secobau/proxy2aws/master/$mode/Shell                               ;
+path=secobau/proxy2aws/master/Shell                               	;
 exec_remote_file $domain $file $path				 	;
 #########################################################################
 file=remove-config-ssm.sh                                               ;
