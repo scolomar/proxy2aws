@@ -5,8 +5,6 @@
 #########################################################################
 set +x && test "$debug" = true && set -x 				;
 #########################################################################
-export debug=$debug							;
-#########################################################################
 git clone https://github.com/secobau/proxy2aws.git proxy2aws		;
 folders=" configs secrets " 						;
 for folder in $folders 							;

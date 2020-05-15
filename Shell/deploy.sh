@@ -30,7 +30,7 @@ path=secobau/docker/master/AWS/install/AMI				;
 exec_remote_file $domain $file $path				 	;
 #########################################################################
 export -f exec_remote_file						;
-export -f send_remote_file					;
+export -f send_remote_file						;
 export -f send_list_command						;
 file=cluster.sh                                               		;
 path=secobau/docker/master/AWS/install/$mode				;
