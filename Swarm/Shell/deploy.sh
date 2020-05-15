@@ -5,9 +5,6 @@
 #########################################################################
 set +x && test "$debug" = true && set -x 				;
 #########################################################################
-export debug=$debug							;
-export deploy=$deploy							;
-#########################################################################
 apps=" aws2cloud aws2prem aws2cloud-BLUE aws2prem-BLUE "		;
 domain=raw.githubusercontent.com                                        ;
 path=secobau/proxy2aws/master/Swarm/$deploy				;

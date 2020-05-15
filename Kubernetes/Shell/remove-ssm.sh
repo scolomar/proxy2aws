@@ -7,19 +7,10 @@ set +x && test "$debug" = true && set -x 				;
 #########################################################################
 export debug=$debug							;
 export deploy=$deploy							;
-export stack=$stack							;
 #########################################################################
 domain=raw.githubusercontent.com                                        ;
-#########################################################################
-file=functions.sh                                                       ;
-path=secobau/docker/master/AWS/common					;
-pwd=$PWD && mkdir --parents $path && cd $path                           ;
-curl -O https://$domain/$path/$file                                     ;
-source ./$file                                                          ;
-cd $pwd && rm --recursive --force $path                                 ;
-#########################################################################
 file=remove.sh    	                                                ;
 path=secobau/proxy2aws/master/Kubernetes/Shell				;
 targets=" InstanceManager1 " 						;
-exec_remote_file_targets $domain "$export" $file $path $stack "$targets";
+send_remote_file $domain "$export" $file $path $stack "$targets";
 #########################################################################
