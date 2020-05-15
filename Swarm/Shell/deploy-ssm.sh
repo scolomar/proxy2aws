@@ -21,5 +21,5 @@ cd $pwd && rm --recursive --force $path                                 ;
 file=deploy.sh    	                                                ;
 path=secobau/proxy2aws/master/Swarm/Shell				;
 targets=" InstanceManager1 " 						;
-exec_remote_file_targets $domain $export $file $path $stack "$targets"		;
+exec_remote_file_targets $domain "$export" $file $path $stack "$targets"		;
 #########################################################################
