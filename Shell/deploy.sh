@@ -13,7 +13,6 @@ test -n "$mode" || exit 100						;
 test -n "$RecordSetName1" || exit 100					;
 test -n "$RecordSetName2" || exit 100					;
 test -n "$RecordSetName3" || exit 100					;
-test -n "$s3domain" || exit 100						;
 test -n "$stack" || exit 100						;
 #########################################################################
 export debug=$debug							;
@@ -24,7 +23,6 @@ export mode=$mode							;
 export RecordSetName1=$RecordSetName1					;
 export RecordSetName2=$RecordSetName2					;
 export RecordSetName3=$RecordSetName3					;
-export s3domain=$s3domain						;
 export stack=$stack							;
 #########################################################################
 export -f exec_remote_file						;
