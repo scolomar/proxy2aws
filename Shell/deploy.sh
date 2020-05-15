@@ -23,7 +23,7 @@ path=secobau/docker/master/AWS/common                                   ;
 pwd=$PWD && mkdir --parents $path && cd $path                           ;
 curl -O https://$domain/$path/$file                                     ;
 source ./$file                                                          ;
-cd $PWD && rm --recursive --force $path                                 ;
+cd $pwd && rm --recursive --force $path                                 ;
 #########################################################################
 path=secobau/docker/master/AWS/install/AMI				;
 file=deploy.sh                                               		;
