@@ -18,8 +18,8 @@ export stack=$stack							;
 #########################################################################
 domain=raw.githubusercontent.com                                        ;
 #########################################################################
-path=secobau/docker/master/AWS/common                                   ;
 file=functions.sh                                                       ;
+path=secobau/docker/master/AWS/common                                   ;
 pwd=$PWD && mkdir --parents $path && cd $path                           ;
 curl -O https://$domain/$path/$file                                     ;
 source ./$file                                                          ;
