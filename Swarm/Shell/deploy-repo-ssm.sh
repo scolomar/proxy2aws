@@ -28,5 +28,5 @@ targets="								\
 	InstanceWorker2							\
 	InstanceWorker3							\
 "									;
-exec_remote_file_targets $domain $file $path $stack "$targets"		;
+exec_remote_file_targets $domain $export $file $path $stack "$targets"		;
 #########################################################################

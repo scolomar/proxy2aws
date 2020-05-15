@@ -20,5 +20,5 @@ rm --force ./$file							;
 file=deploy.sh    	                                                ;
 path=secobau/proxy2aws/master/Kubernetes/Shell				;
 targets=" InstanceManager1 " 						;
-exec_remote_file_targets $domain $file $path $stack "$targets"		;
+exec_remote_file_targets $domain $export $file $path $stack "$targets"		;
 #########################################################################
