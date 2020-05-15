@@ -5,15 +5,15 @@
 #########################################################################
 set +x && test "$debug" = true && set -x				;
 #########################################################################
-test -n "$debug" || exit 100						;
-test -n "$deploy" || exit 100						;
-test -n "$HostedZoneName" || exit 100					;
-test -n "$Identifier" || exit 100					;
-test -n "$mode" || exit 100						;
-test -n "$RecordSetName1" || exit 100					;
-test -n "$RecordSetName2" || exit 100					;
-test -n "$RecordSetName3" || exit 100					;
-test -n "$stack" || exit 100						;
+test -n "$debug"                || exit 100                             ;
+test -n "$deploy" 		|| exit 100				;
+test -n "$HostedZoneName"       || exit 100                             ;
+test -n "$Identifier"           || exit 100                             ;  
+test -n "$mode"                 || exit 100                             ;        
+test -n "$RecordSetName1"       || exit 100                             ;     
+test -n "$RecordSetName2"       || exit 100                             ;     
+test -n "$RecordSetName3"       || exit 100                             ;     
+test -n "$stack"                || exit 100                             ;       
 #########################################################################
 export debug=$debug							;
 export deploy=$deploy							;
