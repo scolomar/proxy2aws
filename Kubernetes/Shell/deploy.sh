@@ -29,9 +29,12 @@ file=cloud2instance.conf						;
 folder=/secrets/etc/nginx/conf.d					;
 sudo kubectl create secret generic $file --from-file $folder/$file $kube;
 #########################################################################
+pwd=$PWD && mkdir --parents $path && cd $path                           ;
 for app in $apps							;
 do 									\
-  curl -O https://$domain/$path/$app.yaml                               ;
-  sudo kubectl apply --filename $app.yaml $kube 			;
+  file=$app.yaml							;
+  curl -O https://$domain/$path/$file                                   ;
+  sudo kubectl apply --filename $file $kube 				;
 done									;
+cd $pwd && rm --recursive --force $path                                 ;
 #########################################################################

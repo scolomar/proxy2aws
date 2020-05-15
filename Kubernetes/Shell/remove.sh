@@ -26,9 +26,12 @@ sudo kubectl delete secret    $file $kube 				;
 apps=" aws2cloud aws2prem aws2cloud-BLUE aws2prem-BLUE "		;
 domain=raw.githubusercontent.com                                        ;
 path=secobau/proxy2aws/master/Kubernetes/$deploy			;
+pwd=$PWD && mkdir --parents $path && cd $path                           ;
 for app in $apps							;
 do 									\
-  curl -O https://$domain/$path/$app.yaml                               ;
-  sudo kubectl delete --filename $app.yaml $kube 			;
+  file=$app.yaml							;
+  curl -O https://$domain/$path/$file                                   ;
+  sudo kubectl delete --filename $file $kube 				;
 done									;
+cd $pwd && rm --recursive --force $path                                 ;
 #########################################################################
