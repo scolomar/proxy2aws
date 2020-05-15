@@ -26,8 +26,8 @@ export RecordSetName3=$RecordSetName3					;
 export stack=$stack							;
 #########################################################################
 export -f exec_remote_file						;
-export -f send_list_command						;
 export -f send_remote_file						;
+export -f send_wait_targets						;
 #########################################################################
 domain=raw.githubusercontent.com                                        ;
 #########################################################################
