@@ -21,7 +21,6 @@ mode=Swarm                                                       	;
 RecordSetName1=service-1                                   		;
 RecordSetName2=service-2                                   		;
 RecordSetName3=service-3                                   		;
-s3domain=docker-aws.s3.ap-south-1.amazonaws.com				;
 stack=docker                                                     	;
 #########################################################################
 export debug								;
@@ -32,7 +31,6 @@ export mode								;
 export RecordSetName1							;
 export RecordSetName2							;
 export RecordSetName3							;
-export s3domain								;
 export stack								;
 #########################################################################
 domain=raw.githubusercontent.com					;
