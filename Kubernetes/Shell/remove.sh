@@ -30,8 +30,9 @@ pwd=$PWD && mkdir --parents $path && cd $path                           ;
 for app in $apps							;
 do 									\
   file=$app.yaml							;
-  curl -O https://$domain/$path/$file                                   ;
+  curl --remote-name https://$domain/$path/$file                        ;
   sudo kubectl delete --filename $file $kube 				;
+  rm --force $file							;
 done									;
 #########################################################################
 cd $pwd && rm --recursive --force $path                                 ;

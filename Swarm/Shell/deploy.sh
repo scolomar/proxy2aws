@@ -15,7 +15,8 @@ path=secobau/proxy2aws/master/Swarm/$deploy				;
 for app in $apps							;
 do 									\
   file=$app.yaml							;
-  curl -O https://$domain/$path/$file                                   ;
+  curl --remote-name https://$domain/$path/$file                        ;
   sudo docker stack deploy --compose-file $file $app 			;
+  rm --force $file							;
 done									;
 #########################################################################

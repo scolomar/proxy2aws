@@ -29,8 +29,9 @@ domain=raw.githubusercontent.com                                        ;
 #########################################################################
 file=functions.sh                                                       ;
 path=secobau/docker/master/AWS/common                                   ;
-curl -O https://$domain/$path/$file                                     ;
+curl --remote-name https://$domain/$path/$file                          ;
 source ./$file                                                          ;
+rm --force ./$file							;
 #########################################################################
 export -f encode_string							;
 export -f exec_remote_file						;
