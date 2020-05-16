@@ -5,8 +5,11 @@
 #########################################################################
 set +x && test "$debug" = true && set -x 				;
 #########################################################################
-git clone https://github.com/secobau/proxy2aws.git proxy2aws		;
+test -n "$debug"	|| exit 100					;
+#########################################################################
 folders=" configs secrets " 						;
+#########################################################################
+git clone https://github.com/secobau/proxy2aws.git proxy2aws		;
 for folder in $folders 							;
 do 									\
   sudo cp --recursive --verbose proxy2aws/$folder / 		 	;
