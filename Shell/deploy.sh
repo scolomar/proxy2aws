@@ -33,7 +33,6 @@ domain=raw.githubusercontent.com                                        ;
 #########################################################################
 file=functions.sh                                                       ;
 path=secobau/docker/master/AWS/common                                   ;
-#########################################################################
 pwd=$PWD && mkdir --parents $path && cd $path                           ;
 curl -O https://$domain/$path/$file                                     ;
 source ./$file                                                          ;
@@ -41,26 +40,21 @@ cd $pwd && rm --recursive --force $path                                 ;
 #########################################################################
 file=deploy.sh                                               		;
 path=secobau/docker/master/AWS/install/AMI				;
-#########################################################################
 exec_remote_file $domain $file $path				 	;
 #########################################################################
 file=cluster.sh                                               		;
-#########################################################################
 path=secobau/docker/master/AWS/install/$mode				;
 exec_remote_file $domain $file $path				 	;
 #########################################################################
 file=deploy-config-ssm.sh                                               ;
 path=secobau/proxy2aws/master/Shell                                     ;
-#########################################################################
 exec_remote_file $domain $file $path				 	;
 #########################################################################
 file=deploy-ssm.sh      	                                        ;
 path=secobau/proxy2aws/master/Shell                               	;
-#########################################################################
 exec_remote_file $domain $file $path				 	;
 #########################################################################
 file=remove-config-ssm.sh                                               ;
 path=secobau/proxy2aws/master/Shell                                     ;
-#########################################################################
 exec_remote_file $domain $file $path				 	;
 #########################################################################
