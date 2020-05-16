@@ -40,6 +40,7 @@ export -f send_command							;
 export -f send_list_command						;
 export -f send_remote_file						;
 export -f send_wait_targets						;
+export -f service_wait_targets						;
 #########################################################################
 file=deploy.sh                                               		;
 path=secobau/docker/master/AWS/install/AMI				;
