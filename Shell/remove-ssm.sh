@@ -5,13 +5,19 @@
 #########################################################################
 set +x && test "$debug" = true && set -x 				;
 #########################################################################
+test -n "$debug"	|| exit 100					;
+test -n "$stack"	|| exit 100					;
+#########################################################################
 domain=raw.githubusercontent.com                                        ;
-export=" export debug=$debug "						;
+export=" 								\
+  export debug=$debug 							\
+"									;
 file=remove.sh    	                                                ;
 path=secobau/proxy2aws/master/$mode/Shell				;
 targets=" InstanceManager1 " 						;
 #########################################################################
-export=" $export 							\
+export=" 								\
+  $export 								\
   &&									\
   export deploy=$deploy							\
 "									;
