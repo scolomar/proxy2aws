@@ -14,5 +14,9 @@ file=deploy-config.sh                                                   ;
 path=secobau/proxy2aws/master/Shell					;
 targets=" InstanceManager1 " 						;
 #########################################################################
-send_remote_file $domain "$export" $file $path $stack "$targets"	;
+output="								\
+  $(									\
+    send_remote_file $domain "$export" $file $path $stack "$targets"	;
+  )									\
+"									;
 #########################################################################

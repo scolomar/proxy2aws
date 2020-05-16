@@ -21,5 +21,9 @@ export=" 								\
   &&									\
   export deploy=$deploy							\
 "									;
-send_remote_file $domain "$export" $file $path $stack "$targets"	;
+output="								\
+  $(									\
+    send_remote_file $domain "$export" $file $path $stack "$targets"	;
+  )									\
+"									;
 #########################################################################
