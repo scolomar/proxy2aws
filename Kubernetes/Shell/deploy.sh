@@ -5,6 +5,9 @@
 #########################################################################
 set +x && test "$debug" = true && set -x 				;
 #########################################################################
+test -n "$debug"        || exit 100                                     ;
+test -n "$deploy"       || exit 100                                     ;
+#########################################################################
 apps=" aws2cloud aws2prem aws2cloud-BLUE aws2prem-BLUE "		;
 domain=raw.githubusercontent.com                                        ;
 kube=" --kubeconfig /etc/kubernetes/admin.conf "			;
@@ -27,11 +30,13 @@ folder=/secrets/etc/nginx/conf.d					;
 sudo kubectl create secret generic $file --from-file $folder/$file $kube;
 #########################################################################
 pwd=$PWD && mkdir --parents $path && cd $path                           ;
+#########################################################################
 for app in $apps							;
 do 									\
   file=$app.yaml							;
   curl -O https://$domain/$path/$file                                   ;
   sudo kubectl apply --filename $file $kube 				;
 done									;
+#########################################################################
 cd $pwd && rm --recursive --force $path                                 ;
 #########################################################################
