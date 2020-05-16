@@ -3,8 +3,8 @@ The connection between the proxy and the services is done through HTTPS with Bas
 
 The proxy service is deployed in AWS on a production-grade highly available and secure infrastructure consisting of private and public subnets, NAT gateways, security groups and application load balancers in order to ensure the isolation and resilience of the different components.
 
-Please follow the shell commands below to set up your infrastructure in AWS.
-You will be able to choose your orchestrator with the "mode" variable:
+You can set up your infrastructure in AWS running the following commands from a terminal in a Cloud9 environment with enough privileges.
+You may also configure the variables so as to customize the setup.
 
 ```BASH 
 
@@ -15,6 +15,7 @@ deploy=latest                                                   	;
 deploy=release                                                   	;
 HostedZoneName=example.com                                  	 	;
 HostedZoneName=sebastian-colomar.com                                   	;
+# Identifier is the ID of the certificate in case you are using HTTPS	#
 Identifier=c3f3310b-f4ed-4874-8849-bd5c2cfe001f                         ;
 mode=Kubernetes                                                       	;
 mode=Swarm                                                       	;
