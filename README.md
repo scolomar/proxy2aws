@@ -36,6 +36,9 @@ export stack								;
 domain=raw.githubusercontent.com					;
 path=secobau/proxy2aws/master/Shell					;
 file=init.sh								;
+date=$( date +%F_%H%M )							;
+mkdir $date								;
+cd $date								;
 curl --remote-name https://$domain/$path/$file				;
 chmod +x ./$file							;
 nohup ./$file								&
