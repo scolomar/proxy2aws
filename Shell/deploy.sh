@@ -25,11 +25,6 @@ export RecordSetName2=$RecordSetName2					;
 export RecordSetName3=$RecordSetName3					;
 export stack=$stack							;
 #########################################################################
-export -f encode_string							;
-export -f exec_remote_file						;
-export -f send_remote_file						;
-export -f send_wait_targets						;
-#########################################################################
 domain=raw.githubusercontent.com                                        ;
 #########################################################################
 file=functions.sh                                                       ;
@@ -38,6 +33,11 @@ pwd=$PWD && mkdir --parents $path && cd $path                           ;
 curl -O https://$domain/$path/$file                                     ;
 source ./$file                                                          ;
 cd $pwd && rm --recursive --force $path                                 ;
+#########################################################################
+export -f encode_string							;
+export -f exec_remote_file						;
+export -f send_remote_file						;
+export -f send_wait_targets						;
 #########################################################################
 file=deploy.sh                                               		;
 path=secobau/docker/master/AWS/install/AMI				;
