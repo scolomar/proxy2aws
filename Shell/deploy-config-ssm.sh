@@ -5,10 +5,14 @@
 #########################################################################
 set +x && test "$debug" = true && set -x 				;
 #########################################################################
+test -n "$debug"	|| exit 100					;
+test -n "$stack"	|| exit 100					;
+#########################################################################
 domain=raw.githubusercontent.com                                        ;
 export=" export debug=$debug "						;
 file=deploy-config.sh                                                   ;
 path=secobau/proxy2aws/master/Shell					;
 targets=" InstanceManager1 " 						;
+#########################################################################
 send_remote_file $domain "$export" $file $path $stack "$targets"	;
 #########################################################################
