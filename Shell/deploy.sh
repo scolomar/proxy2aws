@@ -36,6 +36,8 @@ cd $pwd && rm --recursive --force $path                                 ;
 #########################################################################
 export -f encode_string							;
 export -f exec_remote_file						;
+export -f send_command							;
+export -f send_list_command						;
 export -f send_remote_file						;
 export -f send_wait_targets						;
 #########################################################################
