@@ -21,7 +21,7 @@ mode=Swarm                                                       	;
 RecordSetName1=service-1                                   		;
 RecordSetName2=service-2                                   		;
 RecordSetName3=service-3                                   		;
-stack=docker                                                     	;
+stack=$mode                                                     	;
 #########################################################################
 export debug								;
 export deploy								;
