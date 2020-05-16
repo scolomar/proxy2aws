@@ -35,7 +35,7 @@ export stack								;
 #########################################################################
 domain=raw.githubusercontent.com					;
 path=secobau/proxy2aws/master/Shell					;
-file=deploy.sh								;
+file=init.sh								;
 curl -O https://$domain/$path/$file					;
 chmod +x ./$file							;
 nohup ./$file								&
