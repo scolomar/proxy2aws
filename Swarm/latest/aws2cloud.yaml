@@ -48,12 +48,12 @@ volumes:
  cloud2instance:
 configs:
  aws2cloud:
-  file: /configs/etc/nginx/conf.d/aws2cloud.conf
+  file: /run/configs/etc/nginx/conf.d/aws2cloud.conf
 secrets:
  aws2cloud:
-  file: /secrets/etc/nginx/aws2cloud.htpasswd
+  file: /run/secrets/etc/nginx/aws2cloud.htpasswd
  cloud2instance:
-  file: /secrets/etc/nginx/conf.d/cloud2instance.conf
+  file: /run/secrets/etc/nginx/conf.d/cloud2instance.conf
   
   
   
