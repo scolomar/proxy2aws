@@ -3,27 +3,27 @@
 #      SPDX-License-Identifier:  GPL-2.0-only                           #
 #########################################################################
 
-version: '3.8'
-services:
-  aws2prem:
-    image: "secobau/proxy2aws:release-5.0"
-    ports:
-    - "30002:80"
-    volumes:
-    - aws2prem:/var/log/nginx
-    secrets:
-    - source: aws2prem
-      target: etc/nginx/conf.d/aws2prem.conf
-      mode: 0440
-    deploy:
-      replicas: 6
-      restart_policy:
-        condition: any
-      placement:
-        constraints:
-        - node.role == worker
-volumes:
-  aws2prem:
 secrets:
   aws2prem:
     file: /run/secrets/etc/nginx/conf.d/aws2prem.conf
+services:
+  aws2prem:
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 6
+      restart_policy:
+        condition: any
+    image: "secobau/proxy2aws:release-5.0"
+    ports:
+    - "30002:80"
+    secrets:
+    - mode: 0440
+      source: aws2prem
+      target: etc/nginx/conf.d/aws2prem.conf
+    volumes:
+    - aws2prem:/var/log/nginx
+version: '3.8'
+volumes:
+  aws2prem:
