@@ -10,13 +10,10 @@ You may also configure the variables so as to customize the setup:
 
 
 #########################################################################
-apps=" aws2cloud aws2prem "						;
-AWS=secobau/docker/master/AWS						;
 debug=false                                                     	;
 debug=true                                                     		;
 deploy=latest                                                   	;
 deploy=release                                                   	;
-domain=raw.githubusercontent.com					;
 HostedZoneName=example.com                                  	 	;
 HostedZoneName=sebastian-colomar.com                                   	;
 # Identifier is the ID of the certificate in case you are using HTTPS	#
@@ -30,17 +27,14 @@ RecordSetName1=aws2cloud                                   		;
 RecordSetName2=service-2                                   		;
 RecordSetName2=aws2prem                                   		;
 RecordSetName3=service-3                                   		;
-repository=myproject							;
-repository=proxy2aws							;
-stack=$repository                                                     	;
-username=johndoe							;
-username=secobau							;
+stack=mystack                                                     	;
+stack=proxy2aws                                                     	;
 #########################################################################
-export apps								;
-export AWS								;
+export apps=" aws2cloud aws2prem "					;
+export AWS=secobau/docker/master/AWS					;
 export debug								;
 export deploy								;
-export domain								;
+export domain=raw.githubusercontent.com					;
 export HostedZoneName							;
 export Identifier							;
 export KeyName								;
@@ -48,9 +42,9 @@ export mode								;
 export RecordSetName1							;
 export RecordSetName2							;
 export RecordSetName3							;
-export repository							;
+export repository=proxy2aws						;
 export stack								;
-export username								;
+export username=secobau							;
 #########################################################################
 path=$AWS								;
 file=init.sh								;
