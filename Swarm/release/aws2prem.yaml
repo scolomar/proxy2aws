@@ -12,7 +12,7 @@ services:
       placement:
         constraints:
         - node.role == worker
-      replicas: 6
+      replicas: 3
       restart_policy:
         condition: any
     image: "secobau/proxy2aws:release-5.0"

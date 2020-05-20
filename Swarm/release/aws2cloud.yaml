@@ -22,7 +22,7 @@ services:
       uid: '101'
       gid: '101'
     deploy:
-      replicas: 6
+      replicas: 3
       restart_policy:
         condition: any
       placement:
@@ -37,7 +37,7 @@ services:
       target: etc/nginx/conf.d/cloud2instance.conf
       mode: 0440
     deploy:
-      replicas: 6
+      replicas: 3
       restart_policy:
         condition: any
       placement:
