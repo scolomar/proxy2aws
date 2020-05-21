@@ -18,8 +18,6 @@ HostedZoneName=example.com                                  	 	;
 HostedZoneName=sebastian-colomar.com                                   	;
 # Identifier is the ID of the certificate in case you are using HTTPS	#
 Identifier=c3f3310b-f4ed-4874-8849-bd5c2cfe001f                         ;
-TypeManager=t3a.nano                                                    ;
-TypeWorker=t3a.nano                                                     ;
 KeyName=mySSHpublicKey							;
 KeyName=proxy2aws							;
 mode=Kubernetes                                                       	;
@@ -31,16 +29,16 @@ RecordSetName2=aws2prem                                   		;
 RecordSetName3=service-3                                   		;
 stack=mystack                                                     	;
 stack=proxy2aws                                                     	;
+TypeManager=t3a.nano                                                    ;
+TypeWorker=t3a.nano                                                     ;
 #########################################################################
-export apps=" aws2cloud aws2prem "					;
+export apps=" aws2cloud.yaml aws2prem.yaml "				;
 export AWS=secobau/docker/master/AWS					;
 export debug								;
 export deploy								;
 export domain=raw.githubusercontent.com					;
 export HostedZoneName							;
 export Identifier							;
-export TypeManager                                                      ;
-export TypeWorker                                                       ;
 export KeyName								;
 export mode								;
 export RecordSetName1							;
@@ -48,6 +46,8 @@ export RecordSetName2							;
 export RecordSetName3							;
 export repository=proxy2aws						;
 export stack								;
+export TypeManager                                                      ;
+export TypeWorker                                                       ;
 export username=secobau							;
 #########################################################################
 path=$AWS								;
