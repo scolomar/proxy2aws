@@ -8,12 +8,16 @@ The proxy service is deployed in AWS on a production-grade highly available and 
 You can set up your infrastructure in AWS running the following commands from a terminal in a Cloud9 environment with enough privileges.
 You may also configure the variables so as to customize the setup:
 
+```BASH
+
 #########################################################################
 # Identifier is the ID of the certificate in case you are using HTTPS   #
 #########################################################################
 apps=" aws2cloud.yaml aws2prem.yaml "                                   \
 branch=master                                                             \
+debug=false                                                             \
 debug=true                                                              \
+deploy=latest                                                           \
 deploy=release                                                          \
 docker_branch=master                                                      \
 docker_repository=docker-aws                                            \
@@ -84,9 +88,7 @@ export username                                                         \
                                                                         ;
 #########################################################################
 date=$( date +%F_%H%M )                                                 \
-&&                                                                      \
 file=init.sh                                                            \
-&&                                                                      \
 path=$AWS/bin                                                           \
                                                                         ;
 #########################################################################
@@ -113,9 +115,7 @@ The following command will swap the load balancer so as to point to the BLUE dep
 
 #########################################################################
 date=$( date +%F_%H%M )                                                 \
-&&                                                                      \
 file=aws-target-blue.sh                                                 \
-&&                                                                      \
 path=$AWS/bin                                                           \
                                                                         ;
 #########################################################################
@@ -140,9 +140,7 @@ The following command will swap back the load balancer so as to point again to t
 
 #########################################################################
 date=$( date +%F_%H%M )                                                 \
-&&                                                                      \
 file=aws-target-green.sh                                                \
-&&                                                                      \
 path=$AWS/bin                                                           \
                                                                         ;
 #########################################################################
