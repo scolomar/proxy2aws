@@ -1,17 +1,21 @@
 This project consists of an NginX Reverse Proxy that will forward traffic from one service to another and vice-versa.  
 The connection between the proxy and the services is done through HTTPS with Basic Authentication.
 
+
 The services could represent services in the cloud, on premises or a combination of both.
 
+
 The proxy service is deployed in AWS on a production-grade highly available and secure infrastructure consisting of private and public subnets, NAT gateways, security groups and application load balancers in order to ensure the isolation and resilience of the different components.
+
 
 You can set up your infrastructure in AWS running the following commands from a terminal in a Cloud9 environment with enough privileges.
 You may also configure the variables so as to customize the setup:
 
+
 ```BASH
 
-#########################################################################
-# Identifier is the ID of the certificate in case you are using HTTPS   #
+
+
 #########################################################################
 apps=" aws2cloud.yaml aws2prem.yaml "                                   \
 branch=master                                                             \
@@ -104,13 +108,16 @@ nohup ./$file                                                           &
 #########################################################################
 
 
+
 ```
 
 
 If you are running a BLUE/GREEN deployment the following commands will be useful.
 
+
 The following command will swap the load balancer so as to point to the BLUE deployment:
 ```BASH
+
 
 
 #########################################################################
@@ -134,8 +141,12 @@ nohup ./$file                                                           &
 
 ```
 
+
 The following command will swap back the load balancer so as to point again to the GREEN deployment:
+
+
 ```BASH
+
 
 
 #########################################################################
@@ -166,11 +177,15 @@ You can optionally remove the AWS infrastructure created in CloudFormation other
 ```BASH
 
 
+
 #########################################################################
 ## TO REMOVE THE CLOUDFORMATION STACK                                   #
 aws cloudformation delete-stack --stack-name $stack                     ;
 #########################################################################
 
 
+
 ```
+
+
 
