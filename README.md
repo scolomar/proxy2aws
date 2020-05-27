@@ -34,6 +34,7 @@ mode=kubernetes                                                         \
 mode=swarm                                                              \
 RecordSetName1=aws2cloud                                                \
 RecordSetName2=aws2prem                                                 \
+RecordSetName3=service-3                                                 \
 repository=proxy2aws                                                    \
 s3name=docker-aws                                                       \
 s3region=ap-south-1                                                     \
