@@ -19,11 +19,9 @@ You may also configure the variables so as to customize the setup:
 #########################################################################
 apps=" aws2cloud.yaml aws2prem.yaml "                                   \
 branch_app=master                                                       \
+branch_docker_aws=master                                                \
 debug=false                                                             \
 debug=true                                                              \
-branch_docker_aws=master                                                \
-docker_repository=docker-aws                                            \
-docker_username=secobau                                                 \
 domain=raw.githubusercontent.com                                        \
 HostedZoneName=sebastian-colomar.com                                    \
 Identifier=c3f3310b-f4ed-4874-8849-bd5c2cfe001f                         \
@@ -33,19 +31,21 @@ mode=swarm                                                              \
 RecordSetName1=aws2cloud                                                \
 RecordSetName2=aws2prem                                                 \
 RecordSetName3=service-3                                                \
-repository=proxy2aws                                                    \
+repository_app=proxy2aws                                                \
+repository_docker_aws=docker-aws                                        \
 s3name=docker-aws                                                       \
 s3region=ap-south-1                                                     \
 stack=proxy2aws                                                         \
 template=https.yaml                                                     \
 TypeManager=t3a.nano                                                    \
 TypeWorker=t3a.nano                                                     \
-username=secobau                                                        \
+username_app=secobau                                                    \
+username_docker_aws=secobau                                             \
                                                                         ;
 #########################################################################
 export apps                                                             \
 &&                                                                      \
-export AWS=$docker_username/$docker_repository/$branch_docker_aws       \
+export AWS=$username_docker_aws/$repository_docker_aws/$branch_docker_aws \
 &&                                                                      \
 export branch_app                                                       \
 &&                                                                      \
@@ -55,7 +55,7 @@ export deploy                                                           \
 &&                                                                      \
 export branch_docker_aws                                                \
 &&                                                                      \
-export docker_repository                                                \
+export repository_docker_aws                                            \
 &&                                                                      \
 export domain                                                           \
 &&                                                                      \
@@ -73,7 +73,7 @@ export RecordSetName2                                                   \
 &&                                                                      \
 export RecordSetName3                                                   \
 &&                                                                      \
-export repository                                                       \
+export repository_app                                                   \
 &&                                                                      \
 export s3name                                                           \
 &&                                                                      \
@@ -87,7 +87,7 @@ export TypeManager                                                      \
 &&                                                                      \
 export TypeWorker                                                       \
 &&                                                                      \
-export username                                                         \
+export username_app                                                     \
                                                                         ;
 #########################################################################
 date=$( date +%F_%H%M )                                                 \
