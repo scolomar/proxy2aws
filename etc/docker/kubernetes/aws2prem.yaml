@@ -8,7 +8,7 @@ kind: Deployment
 metadata:
   name: aws2prem
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       service: aws2prem
@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: aws2prem
-        image: secobau/proxy2aws:latest
+        image: secobau/proxy2aws:release-8.0@sha256:dbee13d3e83a4845acc151525b053672f8c4125ea379231e99c1a181149c2321
         volumeMounts:
         - name: aws2prem-logs
           mountPath: /var/log/nginx
@@ -40,10 +40,8 @@ metadata:
 spec:
   ports:
   - port: 80
-    nodePort: 30002
   selector:
     service: aws2prem
-  type: NodePort
 ---
 ###############################################################################
 # kubectl create secret generic aws2prem.conf --from-file aws2prem.conf       ;
