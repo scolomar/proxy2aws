@@ -8,7 +8,7 @@ kind: Deployment
 metadata:
   name: aws2cloud
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       service: aws2cloud
@@ -44,7 +44,7 @@ kind: Deployment
 metadata:
   name: cloud2instance
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       service: cloud2instance
@@ -76,10 +76,8 @@ metadata:
 spec:
   ports:
   - port: 80
-    nodePort: 30001
   selector:
     service: aws2cloud
-  type: NodePort
 ---
 apiVersion: v1
 kind: Service
