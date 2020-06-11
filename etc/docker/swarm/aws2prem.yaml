@@ -15,7 +15,7 @@ services:
       replicas: 6
       restart_policy:
         condition: any
-    image: secobau/nginx:${tag:-1.2@sha256:7ac760edcb2a0e4d9d9284dc845afb9b4786207b7677b3e55e8df00f49f84ec3}
+    image: secobau/nginx:1.2@sha256:7ac760edcb2a0e4d9d9284dc845afb9b4786207b7677b3e55e8df00f49f84ec3
     ports:
     - "30002:80"
     secrets:
