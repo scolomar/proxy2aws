@@ -1,0 +1,74 @@
+#########################################################################
+#      Copyright (C) 2020        Sebastian Francisco Colomar Bauza      #
+#      SPDX-License-Identifier:  GPL-2.0-only                           #
+#########################################################################
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proxy2aws
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: proxy2aws
+  template:
+    metadata:
+      labels:
+        service: proxy2aws
+    spec:
+      containers:
+      -
+        name: proxy2aws
+        image: secobau/nginx:5.1@sha256:17827514270bfa94b2c44d7a9d041adb2041ab93876c6e570f79141b0fe1af5c
+        volumeMounts:
+        -
+          name: aws2cloud-htpasswd
+          mountPath: /etc/nginx
+          readOnly: true
+        -
+          name: nginx-conf
+          mountPath: /etc/nginx
+          readOnly: true
+        -
+          name: proxy2aws-conf
+          mountPath: /etc/nginx/conf.d
+          readOnly: true
+        -
+          name: proxy2aws-logs
+          mountPath: /var/log/nginx
+      volumes:
+      -
+        name: aws2cloud-htpasswd
+        secret:
+          secretName: aws2cloud.htpasswd
+      -
+        name: nginx-conf
+        configMap:
+          name: nginx.conf
+      -
+        name: proxy2aws-conf
+        secret:
+          secretName: proxy2aws.conf
+      -
+        name: proxy2aws-logs
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxy2aws
+spec:
+  ports:
+  - port: 8080
+    nodePort: 30001
+  selector:
+    service: proxy2aws
+  type: NodePort
+---
+###############################################################################
+# f=nginx.conf && kubectl create configmap $f --from-file $f                  ;
+# f=aws2cloud.htpasswd && kubectl create secret generic $f --from-file $f     ;
+# f=proxy2aws.conf && kubectl create secret generic $f --from-file $f         ;
+# kubectl apply -f kube-compose.yaml                                          ;
+###############################################################################
