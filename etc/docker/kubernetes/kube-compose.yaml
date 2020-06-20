@@ -24,24 +24,25 @@ spec:
         volumeMounts:
         -
           name: aws2cloud-htpasswd
-          mountPath: /etc/nginx
+          mountPath: /etc/nginx/aws2cloud.htpasswd
           readOnly: true
         -
           name: nginx-conf
-          mountPath: /etc/nginx
+          mountPath: /etc/nginx/
           readOnly: true
         -
           name: proxy2aws-conf
-          mountPath: /etc/nginx/conf.d
+          mountPath: /etc/nginx/conf.d/proxy2aws.conf
           readOnly: true
         -
           name: proxy2aws-logs
-          mountPath: /var/log/nginx
+          mountPath: /var/log/nginx/
       volumes:
       -
         name: aws2cloud-htpasswd
         secret:
           secretName: aws2cloud.htpasswd
+          defaultMode: 0440
       -
         name: nginx-conf
         configMap:
@@ -50,6 +51,7 @@ spec:
         name: proxy2aws-conf
         secret:
           secretName: proxy2aws.conf
+          defaultMode: 0440
       -
         name: proxy2aws-logs
         emptyDir: {}
