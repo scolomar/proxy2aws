@@ -1,0 +1,48 @@
+#########################################################################
+#      Copyright (C) 2020        Sebastian Francisco Colomar Bauza      #
+#      SPDX-License-Identifier:  GPL-2.0-only                           #
+#########################################################################
+
+configs:
+  nginx.conf:
+    file: /run/configs/proxy2aws/etc/nginx/nginx.conf
+secrets:
+  aws2cloud.htpasswd:
+    file: /run/secrets/proxy2aws/etc/nginx/aws2cloud.htpasswd
+  proxy2aws.conf:
+    file: /run/secrets/proxy2aws/etc/nginx/conf.d/proxy2aws.conf
+services:
+  proxy2aws:
+    configs:
+    -
+      mode: 0440
+      source: nginx.conf
+      target: /etc/nginx/nginx.conf
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+      placement:
+        constraints:
+        - node.role == worker
+    image: secobau/nginx:5.1@sha256:17827514270bfa94b2c44d7a9d041adb2041ab93876c6e570f79141b0fe1af5c
+    ports:
+    - "30001:8080"
+    secrets:
+    -
+      gid: '101'
+      mode: 0440
+      source: aws2cloud.htpasswd
+      target: /etc/nginx/aws2cloud.htpasswd
+      uid: '101'
+    -
+      gid: '101'
+      mode: 0440
+      source: proxy2aws.conf
+      target: /etc/nginx/conf.d/proxy2aws.conf
+      uid: '101'
+    volumes:
+    - proxy2aws:/var/log/nginx
+version: '3.8'
+volumes:
+  proxy2aws:
