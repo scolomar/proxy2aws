@@ -20,38 +20,32 @@ spec:
       containers:
       -
         name: proxy2aws
-        image: secobau/nginx:5.1@sha256:17827514270bfa94b2c44d7a9d041adb2041ab93876c6e570f79141b0fe1af5c
+        image: secobau/nginx:5.2@sha256:31237e77f431d0ecd42c35935b84be219f5c0b09f715c461338c5af57da82286
         volumeMounts:
         -
-          name: aws2cloud-htpasswd
-          mountPath: /etc/nginx/aws2cloud.htpasswd
-          readOnly: true
-        -
-          name: nginx-conf
-          mountPath: /etc/nginx/
-          readOnly: true
-        -
           name: proxy2aws-conf
-          mountPath: /etc/nginx/conf.d/proxy2aws.conf
+          mountPath: /etc/nginx/conf.d
           readOnly: true
         -
           name: proxy2aws-logs
           mountPath: /var/log/nginx/
       volumes:
       -
-        name: aws2cloud-htpasswd
-        secret:
-          secretName: aws2cloud.htpasswd
-          defaultMode: 0440
-      -
-        name: nginx-conf
-        configMap:
-          name: nginx.conf
-      -
         name: proxy2aws-conf
-        secret:
-          secretName: proxy2aws.conf
-          defaultMode: 0440
+        projected:
+          sources:
+          - secret:
+              name: aws2cloud.htpasswd
+              items:
+                key: aws2cloud.htpasswd
+                mode: 0440
+                path: aws2cloud.htpasswd
+          - secret:
+              name: proxy2aws.conf
+              items:
+                key: proxy2aws.conf
+                mode: 0440
+                path: proxy2aws.conf
       -
         name: proxy2aws-logs
         emptyDir: {}
