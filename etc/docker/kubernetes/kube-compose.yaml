@@ -19,36 +19,38 @@ spec:
     spec:
       containers:
       -
-        name: proxy2aws
         image: secobau/nginx:5.2@sha256:31237e77f431d0ecd42c35935b84be219f5c0b09f715c461338c5af57da82286
+        name: proxy2aws
         volumeMounts:
         -
-          name: proxy2aws-conf
           mountPath: /etc/nginx/conf.d
+          name: proxy2aws-conf
           readOnly: true
         -
-          name: proxy2aws-logs
           mountPath: /var/log/nginx/
+          name: proxy2aws-logs
       volumes:
       -
         name: proxy2aws-conf
         projected:
           sources:
           - secret:
+              items:
+                -
+                  key: aws2cloud.htpasswd
+                  mode: 0440
+                  path: aws2cloud.htpasswd
               name: aws2cloud.htpasswd
-              items:
-                key: aws2cloud.htpasswd
-                mode: 0440
-                path: aws2cloud.htpasswd
           - secret:
-              name: proxy2aws.conf
               items:
-                key: proxy2aws.conf
-                mode: 0440
-                path: proxy2aws.conf
+                -
+                  key: proxy2aws.conf
+                  mode: 0440
+                  path: proxy2aws.conf
+              name: proxy2aws.conf
       -
-        name: proxy2aws-logs
         emptyDir: {}
+        name: proxy2aws-logs
 ---
 apiVersion: v1
 kind: Service
@@ -56,8 +58,9 @@ metadata:
   name: proxy2aws
 spec:
   ports:
-  - port: 8080
+  - 
     nodePort: 30001
+    port: 8080
   selector:
     service: proxy2aws
   type: NodePort
