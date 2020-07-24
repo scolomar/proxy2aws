@@ -259,14 +259,13 @@ metadata:
   name: aws2cloud
 spec:
   port:
-    targetPort: 8080
+    targetPort: 80
   tls:
     insecureEdgeTerminationPolicy: Redirect
     termination: edge
   to:
     kind: Service
     name: aws2cloud
-    port: 80
 ---
 apiVersion: route.openshift.io/v1
 kind: Route
@@ -274,14 +273,13 @@ metadata:
   name: aws2prem
 spec:
   port:
-    targetPort: 8080
+    targetPort: 80
   tls:
     insecureEdgeTerminationPolicy: Redirect
     termination: edge
   to:
     kind: Service
     name: aws2prem
-    port: 80
 ---
 apiVersion: v1
 kind: Secret
