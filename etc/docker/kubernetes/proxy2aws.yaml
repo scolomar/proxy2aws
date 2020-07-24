@@ -1,0 +1,247 @@
+#########################################################################
+#      Copyright (C) 2020        Sebastian Francisco Colomar Bauza      #
+#      SPDX-License-Identifier:  GPL-2.0-only                           #
+#########################################################################
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws2cloud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: aws2cloud
+  template:
+    metadata:
+      labels:
+        service: aws2cloud
+    spec:
+      containers:
+      - 
+        image: secobau/nginx:5.4@sha256:9b2aa5efca39514d650fd8391eed82770303597dd2acc2c678a2bbf49052fae4
+        name: aws2cloud
+        volumeMounts:
+        - 
+          mountPath: /var/log/nginx
+          name: aws2cloud-logs
+        - 
+          mountPath: /etc/nginx/conf.d
+          name: aws2cloud-conf
+          readOnly: true
+        - 
+          mountPath: /etc/nginx/htpasswd
+          name: aws2cloud-htpasswd
+          readOnly: true
+      volumes:
+      - 
+        name: aws2cloud-logs
+        persistentVolumeClaim:
+          claimName: aws2cloud
+      - 
+        configMap:
+          name: aws2cloud.conf
+        name: aws2cloud-conf
+      - 
+        name: aws2cloud-htpasswd
+        secret:
+          secretName: aws2cloud.htpasswd
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws2prem
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: aws2prem
+  template:
+    metadata:
+      labels:
+        service: aws2prem
+    spec:
+      containers:
+      - 
+        image: secobau/nginx:5.4@sha256:9b2aa5efca39514d650fd8391eed82770303597dd2acc2c678a2bbf49052fae4
+        name: aws2prem
+        volumeMounts:
+        - 
+          mountPath: /var/log/nginx
+          name: aws2prem-logs
+        - 
+          mountPath: /etc/nginx/conf.d
+          name: aws2prem-conf
+          readOnly: true
+      volumes:
+      - 
+        name: aws2prem-logs
+        persistentVolumeClaim:
+          claimName: aws2prem
+      -
+        name: aws2prem-conf
+        secret:
+          secretName: aws2prem.conf
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud2instance
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: cloud2instance
+  template:
+    metadata:
+      labels:
+        service: cloud2instance
+    spec:
+      containers:
+      - 
+        image: secobau/nginx:5.4@sha256:9b2aa5efca39514d650fd8391eed82770303597dd2acc2c678a2bbf49052fae4
+        name: cloud2instance
+        volumeMounts:
+        - 
+          mountPath: /var/log/nginx
+          name: cloud2instance-logs
+        - 
+          mountPath: /etc/nginx/conf.d
+          name: cloud2instance-conf
+          readOnly: true
+      volumes:
+      - 
+        name: cloud2instance-logs
+        persistentVolumeClaim:
+          claimName: cloud2instance
+      - 
+        name: cloud2instance-conf
+        secret:
+          secretName: cloud2instance.conf
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: aws2cloud
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: gp2
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: aws2prem
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: gp2
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: cloud2instance
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: gp2
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: cloud2instance
+spec:
+  podSelector:
+    matchLabels:
+      service: cloud2instance
+  ingress:
+    -
+      from:
+        -
+          podSelector:
+            matchLabels:
+              service: aws2cloud
+      ports:
+        -
+          port: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+spec:
+  podSelector: {}
+  policyTypes:
+  - Egress
+  - Ingress
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: aws2cloud
+spec:
+  port:
+    targetPort: 8080
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: aws2cloud
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: aws2prem
+spec:
+  port:
+    targetPort: 8080
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: aws2prem
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aws2cloud
+spec:
+  ports:
+  - 
+    port: 8080
+  selector:
+    service: aws2cloud
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aws2prem
+spec:
+  ports:
+  -
+    port: 8080
+  selector:
+    service: aws2prem
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloud2instance
+spec:
+  ports:
+  - 
+    port: 8080
+  selector:
+    service: cloud2instance
+---
