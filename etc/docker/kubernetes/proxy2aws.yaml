@@ -3,6 +3,26 @@
 #      SPDX-License-Identifier:  GPL-2.0-only                           #
 #########################################################################
 ---
+apiVersion: v1
+data:
+  aws2cloud.conf: |
+    server {
+      listen 80;
+      location / {
+        index  index.html index.htm;
+        root /usr/share/nginx/html;
+      }
+      location /cloud/ {
+        auth_basic "AWS to Cloud";
+        auth_basic_user_file /run/secrets/etc/nginx/aws2cloud.htpasswd;
+        proxy_pass http://cloud2instance;
+      }
+      server_name localhost;
+    }
+kind: ConfigMap
+metadata:
+  name: aws2cloud.conf
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -213,6 +233,60 @@ spec:
     kind: Service
     name: aws2prem
     port: 80
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: aws2cloud.htpasswd
+type: Opaque
+stringData:
+  aws2cloud.htpasswd: "user:$apr1$uxXV/.l8$B/ICUq7kIpFwNyUW7hrUX1"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: aws2prem.conf
+type: Opaque
+stringData:
+  aws2prem.conf: |
+    server {
+      listen 80;
+      location / {
+        index index.html index.htm;
+        root /usr/share/nginx/html;
+      }
+      location /prem/ {
+        proxy_pass https://www.upm.es;
+        proxy_set_header Authorization "Basic dXNlcjpwYXNzd29yZA==";
+        rewrite ^/prem/(.*)$ /$1 break;
+      }
+      server_name localhost;
+    }
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cloud2instance.conf
+type: Opaque
+stringData:
+  cloud2instance.conf: |
+    server {
+      listen 80;
+      location / {
+        index  index.html index.htm;
+        root /usr/share/nginx/html;
+      }
+      location /cloud/www.upm.es/ {
+        proxy_pass https://www.upm.es;
+        rewrite ^/cloud/www.upm.es/(.*)$ /$1 break;
+      }
+      location /cloud/www.upv.es/ {
+        proxy_pass https://www.upv.es;
+        rewrite ^/cloud/www.upv.es/(.*)$ /$1 break;
+      }
+      proxy_set_header Authorization "Basic dXNlcjpwYXNzd29yZA==";
+      server_name localhost;
+    }
 ---
 apiVersion: v1
 kind: Service
