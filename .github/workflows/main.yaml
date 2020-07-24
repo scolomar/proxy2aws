@@ -34,7 +34,7 @@ jobs:
       run: |
         set -x
         compose=etc/docker/swarm/docker-compose.yaml
-        script=bin/check-service.sh
+        script=.github/bin/check-service.sh
         sudo cp -rv run/* /run
         sed -i s/worker/manager/ ${compose}
         docker swarm init
