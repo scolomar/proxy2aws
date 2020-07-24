@@ -21,7 +21,7 @@ data:
     }
 kind: ConfigMap
 metadata:
-  name: aws2cloud.conf
+  name: aws2cloud
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -60,12 +60,12 @@ spec:
           claimName: aws2cloud
       - 
         configMap:
-          name: aws2cloud.conf
+          name: aws2cloud
         name: aws2cloud-conf
       - 
         name: aws2cloud-htpasswd
         secret:
-          secretName: aws2cloud.htpasswd
+          secretName: aws2cloud
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -101,7 +101,7 @@ spec:
       -
         name: aws2prem-conf
         secret:
-          secretName: aws2prem.conf
+          secretName: aws2prem
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -137,7 +137,7 @@ spec:
       - 
         name: cloud2instance-conf
         secret:
-          secretName: cloud2instance.conf
+          secretName: cloud2instance
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -237,7 +237,7 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: aws2cloud.htpasswd
+  name: aws2cloud
 type: Opaque
 stringData:
   aws2cloud.htpasswd: "user:$apr1$uxXV/.l8$B/ICUq7kIpFwNyUW7hrUX1"
@@ -245,7 +245,7 @@ stringData:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: aws2prem.conf
+  name: aws2prem
 type: Opaque
 stringData:
   aws2prem.conf: |
@@ -266,7 +266,7 @@ stringData:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: cloud2instance.conf
+  name: cloud2instance
 type: Opaque
 stringData:
   cloud2instance.conf: |
