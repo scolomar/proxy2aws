@@ -259,7 +259,7 @@ metadata:
   name: aws2cloud
 spec:
   port:
-    targetPort: 80
+    targetPort: 8080
   tls:
     insecureEdgeTerminationPolicy: Redirect
     termination: edge
@@ -273,7 +273,7 @@ metadata:
   name: aws2prem
 spec:
   port:
-    targetPort: 80
+    targetPort: 8080
   tls:
     insecureEdgeTerminationPolicy: Redirect
     termination: edge
@@ -342,8 +342,7 @@ metadata:
 spec:
   ports:
   - 
-    port: 80
-    targetPort: 8080
+    port: 8080
   selector:
     service: aws2cloud
 ---
@@ -354,8 +353,7 @@ metadata:
 spec:
   ports:
   -
-    port: 80
-    targetPort: 8080
+    port: 8080
   selector:
     service: aws2prem
 ---
@@ -366,8 +364,7 @@ metadata:
 spec:
   ports:
   - 
-    port: 80
-    targetPort: 8080
+    port: 8080
   selector:
     service: cloud2instance
 ---
