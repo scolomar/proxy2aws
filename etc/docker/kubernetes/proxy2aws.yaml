@@ -119,42 +119,6 @@ spec:
         secret:
           secretName: cloud2instance.conf
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: aws2cloud
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  storageClassName: gp2
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: aws2prem
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  storageClassName: gp2
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: cloud2instance
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  storageClassName: gp2
----
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -184,6 +148,42 @@ spec:
   - Egress
   - Ingress
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: aws2cloud
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: gp2
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: aws2prem
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: gp2
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: cloud2instance
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: gp2
+---
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
@@ -197,6 +197,7 @@ spec:
   to:
     kind: Service
     name: aws2cloud
+    port: 80
 ---
 apiVersion: route.openshift.io/v1
 kind: Route
@@ -211,6 +212,7 @@ spec:
   to:
     kind: Service
     name: aws2prem
+    port: 80
 ---
 apiVersion: v1
 kind: Service
@@ -219,7 +221,8 @@ metadata:
 spec:
   ports:
   - 
-    port: 8080
+    port: 80
+    targetPort: 8080
   selector:
     service: aws2cloud
 ---
@@ -230,7 +233,8 @@ metadata:
 spec:
   ports:
   -
-    port: 8080
+    port: 80
+    targetPort: 8080
   selector:
     service: aws2prem
 ---
@@ -241,7 +245,8 @@ metadata:
 spec:
   ports:
   - 
-    port: 8080
+    port: 80
+    targetPort: 8080
   selector:
     service: cloud2instance
 ---
