@@ -7,19 +7,19 @@ kind: Template
 metadata:
   annotations:
     description: >-
-      PHP Info
-    iconClass: icon-php
-    openshift.io/display-name: 'PHP Info'
+      proxy2aws
+    iconClass: icon-nginx
+    openshift.io/display-name: 'proxy2aws'
     openshift.io/provider-display-name: 'Sebastian Colomar'
     samples.operator.openshift.io/version: 4.5.2
-    tags: 'php,phpinfo'
+    tags: 'proxy,aws,proxy2aws,nginx'
     version: '${APP_VERSION}'
   labels:
-    app: phpinfo
+    app: proxy2aws
     samples.operator.openshift.io/managed: 'true'
-  name: phpinfo
+  name: proxy2aws
   namespace: openshift
-message: 'PHP Info is now deployed.'
+message: 'proxy2aws is now deployed.'
 objects:
   -
     apiVersion: v1
@@ -40,8 +40,8 @@ objects:
         }
     kind: ConfigMap
     metadata:
-      name: aws2cloud
-    ---
+      name: aws2cloud-cm
+  -
     apiVersion: v1
     data:
       nginx.conf: |
@@ -65,26 +65,29 @@ objects:
         }
     kind: ConfigMap
     metadata:
-      name: nginx
-    ---
+      name: nginx-cm
+  -
     apiVersion: apps/v1
     kind: Deployment
     metadata:
-      name: aws2cloud
+      name: aws2cloud-deploy
     spec:
       replicas: 1
       selector:
         matchLabels:
-          service: aws2cloud
+          service: aws2cloud-svc
       template:
         metadata:
           labels:
-            service: aws2cloud
+            service: aws2cloud-svc
         spec:
           containers:
           - 
-            image: secobau/nginx:5.4@sha256:9b2aa5efca39514d650fd8391eed82770303597dd2acc2c678a2bbf49052fae4
-            name: aws2cloud
+            image: secobau/nginx:${APP_VERSION}${APP_DIGEST}
+            name: aws2cloud-container
+            ports:
+            -
+              containerPort: 8080
             volumeMounts:
             - 
               mountPath: /var/log/nginx
@@ -105,38 +108,41 @@ objects:
           - 
             name: aws2cloud-logs
             persistentVolumeClaim:
-              claimName: aws2cloud
+              claimName: aws2cloud-pvc
           - 
             configMap:
-              name: aws2cloud
+              name: aws2cloud-cm
             name: aws2cloud-conf
           - 
             name: aws2cloud-htpasswd
             secret:
-              secretName: aws2cloud
+              secretName: aws2cloud-secret
           - 
             configMap:
-              name: nginx
+              name: nginx-cm
             name: nginx-conf
-    ---
+  -
     apiVersion: apps/v1
     kind: Deployment
     metadata:
-      name: aws2prem
+      name: aws2prem-deploy
     spec:
       replicas: 1
       selector:
         matchLabels:
-          service: aws2prem
+          service: aws2prem-svc
       template:
         metadata:
           labels:
-            service: aws2prem
+            service: aws2prem-svc
         spec:
           containers:
           - 
-            image: secobau/nginx:5.4@sha256:9b2aa5efca39514d650fd8391eed82770303597dd2acc2c678a2bbf49052fae4
-            name: aws2prem
+            image: secobau/nginx:${APP_VERSION}${APP_DIGEST}
+            name: aws2prem-container
+            ports:
+            -
+              containerPort: 8080
             volumeMounts:
             - 
               mountPath: /var/log/nginx
@@ -153,34 +159,37 @@ objects:
           - 
             name: aws2prem-logs
             persistentVolumeClaim:
-              claimName: aws2prem
+              claimName: aws2prem-pvc
           -
             name: aws2prem-conf
             secret:
-              secretName: aws2prem
+              secretName: aws2prem-secret
           - 
             configMap:
-              name: nginx
+              name: nginx-cm
             name: nginx-conf
-    ---
+  -
     apiVersion: apps/v1
     kind: Deployment
     metadata:
-      name: cloud2instance
+      name: cloud2instance-deploy
     spec:
       replicas: 1
       selector:
         matchLabels:
-          service: cloud2instance
+          service: cloud2instance-svc
       template:
         metadata:
           labels:
-            service: cloud2instance
+            service: cloud2instance-svc
         spec:
           containers:
           - 
-            image: secobau/nginx:5.4@sha256:9b2aa5efca39514d650fd8391eed82770303597dd2acc2c678a2bbf49052fae4
-            name: cloud2instance
+            image: secobau/nginx:${APP_VERSION}${APP_DIGEST}
+            name: cloud2instance-container
+            ports:
+            -
+              containerPort: 8080
             volumeMounts:
             - 
               mountPath: /var/log/nginx
@@ -197,39 +206,67 @@ objects:
           - 
             name: cloud2instance-logs
             persistentVolumeClaim:
-              claimName: cloud2instance
+              claimName: cloud2instance-pvc
           - 
             name: cloud2instance-conf
             secret:
-              secretName: cloud2instance
+              secretName: cloud2instance-pvc
           - 
             configMap:
-              name: nginx
+              name: nginx-cm
             name: nginx-conf
-    ---
+  -
     apiVersion: networking.k8s.io/v1
     kind: NetworkPolicy
     metadata:
-      name: cloud2instance
+      name: aws2cloud-netpol
     spec:
       podSelector:
         matchLabels:
-          service: cloud2instance
+          service: aws2cloud-svc
+      ingress:
+        -
+          ports:
+            -
+              port: 8080
+  -
+    apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: aws2prem-netpol
+    spec:
+      podSelector:
+        matchLabels:
+          service: aws2prem-svc
+      ingress:
+        -
+          ports:
+            -
+              port: 8080
+  -
+    apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: cloud2instance-netpol
+    spec:
+      podSelector:
+        matchLabels:
+          service: cloud2instance-svc
       ingress:
         -
           from:
             -
               podSelector:
                 matchLabels:
-                  service: aws2cloud
+                  service: aws2cloud-svc
           ports:
             -
               port: 8080
-    ---
+  -
     apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
-      name: aws2cloud
+      name: aws2cloud-pvc
     spec:
       accessModes:
         - ReadWriteOnce
@@ -237,11 +274,11 @@ objects:
         requests:
           storage: 1Gi
       storageClassName: gp2
-    ---
+  -
     apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
-      name: aws2prem
+      name: aws2prem-pvc
     spec:
       accessModes:
         - ReadWriteOnce
@@ -249,11 +286,11 @@ objects:
         requests:
           storage: 1Gi
       storageClassName: gp2
-    ---
+  -
     apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
-      name: cloud2instance
+      name: cloud2instance-pvc
     spec:
       accessModes:
         - ReadWriteOnce
@@ -261,11 +298,11 @@ objects:
         requests:
           storage: 1Gi
       storageClassName: gp2
-    ---
+  -
     apiVersion: route.openshift.io/v1
     kind: Route
     metadata:
-      name: aws2cloud
+      name: aws2cloud-route
     spec:
       port:
         targetPort: 8080
@@ -274,8 +311,8 @@ objects:
         termination: edge
       to:
         kind: Service
-        name: aws2cloud
-    ---
+        name: aws2cloud-svc
+  -
     apiVersion: route.openshift.io/v1
     kind: Route
     metadata:
@@ -289,7 +326,7 @@ objects:
       to:
         kind: Service
         name: aws2prem
-    ---
+  -
     apiVersion: v1
     kind: Secret
     metadata:
@@ -297,7 +334,7 @@ objects:
     type: Opaque
     stringData:
       aws2cloud.htpasswd: "user:$apr1$uxXV/.l8$B/ICUq7kIpFwNyUW7hrUX1"
-    ---
+  -
     apiVersion: v1
     kind: Secret
     metadata:
@@ -318,7 +355,7 @@ objects:
           }
           server_name localhost;
         }
-    ---
+  -
     apiVersion: v1
     kind: Secret
     metadata:
@@ -343,7 +380,7 @@ objects:
           proxy_set_header Authorization "Basic dXNlcjpwYXNzd29yZA==";
           server_name localhost;
         }
-    ---
+  -
     apiVersion: v1
     kind: Service
     metadata:
@@ -355,7 +392,7 @@ objects:
         targetPort: 8080
       selector:
         service: aws2cloud
-    ---
+  -
     apiVersion: v1
     kind: Service
     metadata:
@@ -367,7 +404,7 @@ objects:
         targetPort: 8080
       selector:
         service: aws2prem
-    ---
+  -
     apiVersion: v1
     kind: Service
     metadata:
@@ -379,4 +416,3 @@ objects:
         targetPort: 8080
       selector:
         service: cloud2instance
-    ---
