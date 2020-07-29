@@ -117,7 +117,13 @@ objects:
             -
               mountPath: /var/cache/nginx
               name: nginx-cache
+            -
+              mountPath: /var/run
+              name: nginx-run
           volumes:
+          -
+            name: nginx-run
+            emptyDir: {}
           -
             name: nginx-cache
             emptyDir: {}
@@ -184,7 +190,13 @@ objects:
             -
               mountPath: /var/cache/nginx
               name: nginx-cache
+            -
+              mountPath: /var/run
+              name: nginx-run
           volumes:
+          -
+            name: nginx-run
+            emptyDir: {}
           -
             name: nginx-cache
             emptyDir: {}
@@ -247,7 +259,13 @@ objects:
             -
               mountPath: /var/cache/nginx
               name: nginx-cache
+            -
+              mountPath: /var/run
+              name: nginx-run
           volumes:
+          -
+            name: nginx-run
+            emptyDir: {}
           -
             name: nginx-cache
             emptyDir: {}
