@@ -316,7 +316,7 @@ objects:
     apiVersion: route.openshift.io/v1
     kind: Route
     metadata:
-      name: aws2prem
+      name: aws2prem-route
     spec:
       port:
         targetPort: 8080
@@ -325,12 +325,12 @@ objects:
         termination: edge
       to:
         kind: Service
-        name: aws2prem
+        name: aws2prem-svc
   -
     apiVersion: v1
     kind: Secret
     metadata:
-      name: aws2cloud
+      name: aws2cloud-secret
     type: Opaque
     stringData:
       aws2cloud.htpasswd: "user:$apr1$uxXV/.l8$B/ICUq7kIpFwNyUW7hrUX1"
@@ -338,7 +338,7 @@ objects:
     apiVersion: v1
     kind: Secret
     metadata:
-      name: aws2prem
+      name: aws2prem-secret
     type: Opaque
     stringData:
       aws2prem.conf: |
@@ -359,7 +359,7 @@ objects:
     apiVersion: v1
     kind: Secret
     metadata:
-      name: cloud2instance
+      name: cloud2instance-secret
     type: Opaque
     stringData:
       cloud2instance.conf: |
@@ -391,7 +391,7 @@ objects:
         port: 80
         targetPort: 8080
       selector:
-        service: aws2cloud
+        service: aws2cloud-svc
   -
     apiVersion: v1
     kind: Service
@@ -403,7 +403,7 @@ objects:
         port: 80
         targetPort: 8080
       selector:
-        service: aws2prem
+        service: aws2prem-svc
   -
     apiVersion: v1
     kind: Service
@@ -415,4 +415,4 @@ objects:
         port: 80
         targetPort: 8080
       selector:
-        service: cloud2instance
+        service: cloud2instance-svc
