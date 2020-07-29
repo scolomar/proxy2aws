@@ -261,7 +261,7 @@ objects:
           - 
             name: cloud2instance-conf
             secret:
-              secretName: cloud2instance-pvc
+              secretName: cloud2instance-secret
           - 
             configMap:
               name: nginx-cm
