@@ -377,7 +377,7 @@ objects:
         termination: edge
       to:
         kind: Service
-        name: aws2cloud-svc
+        name: aws2cloud
   -
     apiVersion: route.openshift.io/v1
     kind: Route
@@ -391,7 +391,7 @@ objects:
         termination: edge
       to:
         kind: Service
-        name: aws2prem-svc
+        name: aws2prem
   -
     apiVersion: v1
     kind: Secret
