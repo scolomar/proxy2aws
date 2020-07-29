@@ -98,13 +98,6 @@ objects:
                 path: /
                 port: 8080
               initialDelaySeconds: 1
-            resources:
-              limits:
-                cpu: '${CPU_LIMIT}'
-                memory: '${MEMORY_LIMIT}'
-              requests:
-                cpu: '${CPU_REQUEST}'
-                memory: '${MEMORY_REQUEST}'
             volumeMounts:
             - 
               mountPath: /var/log/nginx
@@ -170,13 +163,6 @@ objects:
                 path: /
                 port: 8080
               initialDelaySeconds: 1
-            resources:
-              limits:
-                cpu: '${CPU_LIMIT}'
-                memory: '${MEMORY_LIMIT}'
-              requests:
-                cpu: '${CPU_REQUEST}'
-                memory: '${MEMORY_REQUEST}'
             volumeMounts:
             - 
               mountPath: /var/log/nginx
@@ -234,13 +220,6 @@ objects:
                 path: /
                 port: 8080
               initialDelaySeconds: 1
-            resources:
-              limits:
-                cpu: '${CPU_LIMIT}'
-                memory: '${MEMORY_LIMIT}'
-              requests:
-                cpu: '${CPU_REQUEST}'
-                memory: '${MEMORY_REQUEST}'
             volumeMounts:
             - 
               mountPath: /var/log/nginx
