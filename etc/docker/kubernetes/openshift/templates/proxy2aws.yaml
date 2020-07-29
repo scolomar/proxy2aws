@@ -114,19 +114,7 @@ objects:
               mountPath: /run/nginx/etc/nginx
               name: nginx-conf
               readOnly: true
-            -
-              mountPath: /var/cache/nginx
-              name: nginx-cache
-            -
-              mountPath: /var/run
-              name: nginx-run
           volumes:
-          -
-            name: nginx-run
-            emptyDir: {}
-          -
-            name: nginx-cache
-            emptyDir: {}
           - 
             name: aws2cloud-logs
             persistentVolumeClaim:
@@ -187,19 +175,7 @@ objects:
               mountPath: /run/nginx/etc/nginx
               name: nginx-conf
               readOnly: true
-            -
-              mountPath: /var/cache/nginx
-              name: nginx-cache
-            -
-              mountPath: /var/run
-              name: nginx-run
           volumes:
-          -
-            name: nginx-run
-            emptyDir: {}
-          -
-            name: nginx-cache
-            emptyDir: {}
           - 
             name: aws2prem-logs
             persistentVolumeClaim:
@@ -256,19 +232,7 @@ objects:
               mountPath: /run/nginx/etc/nginx
               name: nginx-conf
               readOnly: true
-            -
-              mountPath: /var/cache/nginx
-              name: nginx-cache
-            -
-              mountPath: /var/run
-              name: nginx-run
           volumes:
-          -
-            name: nginx-run
-            emptyDir: {}
-          -
-            name: nginx-cache
-            emptyDir: {}
           - 
             name: cloud2instance-logs
             persistentVolumeClaim:
