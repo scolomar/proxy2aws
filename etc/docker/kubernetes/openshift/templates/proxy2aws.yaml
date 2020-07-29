@@ -479,7 +479,7 @@ parameters:
     displayName: Application Digest
     name: APP_DIGEST
     required: true
-    value: ''
+    value: ' '
   -
     description: The amount of CPU each container is limited to use.
     displayName: CPU limit
