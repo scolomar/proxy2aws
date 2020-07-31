@@ -88,7 +88,7 @@ objects:
               httpGet:
                 path: /
                 port: 8080
-              initialDelaySeconds: 30
+              initialDelaySeconds: 10
             name: aws2cloud-container
             ports:
               -
@@ -165,7 +165,7 @@ objects:
               httpGet:
                 path: /
                 port: 8080
-              initialDelaySeconds: 30
+              initialDelaySeconds: 10
             name: aws2prem-container
             ports:
               -
@@ -234,7 +234,7 @@ objects:
               httpGet:
                 path: /
                 port: 8080
-              initialDelaySeconds: 30
+              initialDelaySeconds: 10
             name: cloud2instance-container
             ports:
               -
