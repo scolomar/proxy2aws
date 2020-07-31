@@ -21,7 +21,7 @@ data:
     }
 kind: ConfigMap
 metadata:
-  name: aws2cloud
+  name: aws2cloud-cm
 ---
 apiVersion: v1
 data:
@@ -46,26 +46,40 @@ data:
     }
 kind: ConfigMap
 metadata:
-  name: nginx
+  name: nginx-cm
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aws2cloud
+  name: aws2cloud-deploy
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: aws2cloud
+      service: aws2cloud-svc
   template:
     metadata:
       labels:
-        service: aws2cloud
+        service: aws2cloud-svc
     spec:
       containers:
       - 
         image: secobau/nginx:5.4@sha256:9b2aa5efca39514d650fd8391eed82770303597dd2acc2c678a2bbf49052fae4
         name: aws2cloud
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 10
+        name: aws2cloud-container
+        ports:
+          -
+            containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 1
         volumeMounts:
         - 
           mountPath: /var/log/nginx
@@ -82,14 +96,26 @@ spec:
           mountPath: /run/nginx/etc/nginx
           name: nginx-conf
           readOnly: true
+        -
+          mountPath: /var/cache/nginx
+          name: nginx-cache
+        -
+          mountPath: /var/run
+          name: nginx-run
       volumes:
+      -
+        name: nginx-run
+        emptyDir: {}
+      -
+        name: nginx-cache
+        emptyDir: {}
       - 
         name: aws2cloud-logs
         persistentVolumeClaim:
           claimName: aws2cloud
       - 
         configMap:
-          name: aws2cloud
+          name: aws2cloud-cm
         name: aws2cloud-conf
       - 
         name: aws2cloud-htpasswd
@@ -97,27 +123,40 @@ spec:
           secretName: aws2cloud
       - 
         configMap:
-          name: nginx
+          name: nginx-cm
         name: nginx-conf
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aws2prem
+  name: aws2prem-deploy
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: aws2prem
+      service: aws2prem-svc
   template:
     metadata:
       labels:
-        service: aws2prem
+        service: aws2prem-svc
     spec:
       containers:
       - 
         image: secobau/nginx:5.4@sha256:9b2aa5efca39514d650fd8391eed82770303597dd2acc2c678a2bbf49052fae4
-        name: aws2prem
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 10
+        name: aws2prem-container
+        ports:
+          -
+            containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 1
         volumeMounts:
         - 
           mountPath: /var/log/nginx
@@ -130,38 +169,63 @@ spec:
           mountPath: /run/nginx/etc/nginx
           name: nginx-conf
           readOnly: true
+        -
+          mountPath: /var/cache/nginx
+          name: nginx-cache
+        -
+          mountPath: /var/run
+          name: nginx-run
       volumes:
+      -
+        name: nginx-run
+        emptyDir: {}
+      -
+        name: nginx-cache
+        emptyDir: {}
       - 
         name: aws2prem-logs
         persistentVolumeClaim:
-          claimName: aws2prem
+          claimName: aws2prem-pvc
       -
         name: aws2prem-conf
         secret:
-          secretName: aws2prem
+          secretName: aws2prem-secret
       - 
         configMap:
-          name: nginx
+          name: nginx-cm
         name: nginx-conf
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cloud2instance
+  name: cloud2instance-deploy
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: cloud2instance
+      service: cloud2instance-svc
   template:
     metadata:
       labels:
-        service: cloud2instance
+        service: cloud2instance-svc
     spec:
       containers:
       - 
         image: secobau/nginx:5.4@sha256:9b2aa5efca39514d650fd8391eed82770303597dd2acc2c678a2bbf49052fae4
-        name: cloud2instance
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 10
+        name: cloud2instance-container
+        ports:
+          -
+            containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 1
         volumeMounts:
         - 
           mountPath: /var/log/nginx
@@ -174,35 +238,75 @@ spec:
           mountPath: /run/nginx/etc/nginx
           name: nginx-conf
           readOnly: true
+        -
+          mountPath: /var/cache/nginx
+          name: nginx-cache
+        -
+          mountPath: /var/run
+          name: nginx-run
       volumes:
+      -
+        name: nginx-run
+        emptyDir: {}
+      -
+        name: nginx-cache
+        emptyDir: {}
       - 
         name: cloud2instance-logs
         persistentVolumeClaim:
-          claimName: cloud2instance
+          claimName: cloud2instance-pvc
       - 
         name: cloud2instance-conf
         secret:
-          secretName: cloud2instance
+          secretName: cloud2instance-secret
       - 
         configMap:
-          name: nginx
+          name: nginx-cm
         name: nginx-conf
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: cloud2instance
+  name: aws2cloud-netpol
 spec:
   podSelector:
     matchLabels:
-      service: cloud2instance
+      service: aws2cloud-svc
+  ingress:
+    -
+      ports:
+        -
+          port: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: aws2prem-netpol
+spec:
+  podSelector:
+    matchLabels:
+      service: aws2prem-svc
+  ingress:
+    -
+      ports:
+        -
+          port: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: cloud2instance-netpol
+spec:
+  podSelector:
+    matchLabels:
+      service: cloud2instance-svc
   ingress:
     -
       from:
         -
           podSelector:
             matchLabels:
-              service: aws2cloud
+              service: aws2cloud-svc
       ports:
         -
           port: 8080
@@ -210,7 +314,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: aws2cloud
+  name: aws2cloud-pvc
 spec:
   accessModes:
     - ReadWriteOnce
@@ -222,7 +326,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: aws2prem
+  name: aws2prem-pvc
 spec:
   accessModes:
     - ReadWriteOnce
@@ -234,7 +338,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: cloud2instance
+  name: cloud2instance-pvc
 spec:
   accessModes:
     - ReadWriteOnce
@@ -246,7 +350,7 @@ spec:
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: aws2cloud
+  name: aws2cloud-route
 spec:
   port:
     targetPort: 8080
@@ -260,7 +364,7 @@ spec:
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: aws2prem
+  name: aws2prem-route
 spec:
   port:
     targetPort: 8080
@@ -274,7 +378,7 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: aws2cloud
+  name: aws2cloud-secret
 type: Opaque
 stringData:
   aws2cloud.htpasswd: "user:$apr1$uxXV/.l8$B/ICUq7kIpFwNyUW7hrUX1"
@@ -282,7 +386,7 @@ stringData:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: aws2prem
+  name: aws2prem-secret
 type: Opaque
 stringData:
   aws2prem.conf: |
@@ -303,7 +407,7 @@ stringData:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: cloud2instance
+  name: cloud2instance-secret
 type: Opaque
 stringData:
   cloud2instance.conf: |
@@ -335,7 +439,7 @@ spec:
     port: 80
     targetPort: 8080
   selector:
-    service: aws2cloud
+    service: aws2cloud-svc
 ---
 apiVersion: v1
 kind: Service
@@ -347,7 +451,7 @@ spec:
     port: 80
     targetPort: 8080
   selector:
-    service: aws2prem
+    service: aws2prem-svc
 ---
 apiVersion: v1
 kind: Service
@@ -359,5 +463,5 @@ spec:
     port: 80
     targetPort: 8080
   selector:
-    service: cloud2instance
+    service: cloud2instance-svc
 ---
