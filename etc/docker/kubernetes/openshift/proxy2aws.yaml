@@ -56,16 +56,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      service: aws2cloud-svc
+      app: aws2cloud
   template:
     metadata:
       labels:
-        service: aws2cloud-svc
+        app: aws2cloud
     spec:
       containers:
       - 
         image: secobau/nginx:5.4@sha256:9b2aa5efca39514d650fd8391eed82770303597dd2acc2c678a2bbf49052fae4
-        name: aws2cloud
         livenessProbe:
           httpGet:
             path: /
@@ -83,48 +82,48 @@ spec:
         volumeMounts:
         - 
           mountPath: /var/log/nginx
-          name: aws2cloud-logs
+          name: aws2cloud-logs-vol
         - 
           mountPath: /etc/nginx/conf.d
-          name: aws2cloud-conf
+          name: aws2cloud-conf-vol
           readOnly: true
         - 
           mountPath: /etc/nginx/htpasswd
-          name: aws2cloud-htpasswd
+          name: aws2cloud-htpasswd-vol
           readOnly: true
         - 
           mountPath: /run/nginx/etc/nginx
-          name: nginx-conf
+          name: nginx-conf-vol
           readOnly: true
         -
           mountPath: /var/cache/nginx
-          name: nginx-cache
+          name: nginx-cache-vol
         -
           mountPath: /var/run
-          name: nginx-run
+          name: nginx-run-vol
       volumes:
       -
-        name: nginx-run
+        name: nginx-run-vol
         emptyDir: {}
       -
-        name: nginx-cache
+        name: nginx-cache-vol
         emptyDir: {}
       - 
-        name: aws2cloud-logs
+        name: aws2cloud-logs-vol
         persistentVolumeClaim:
-          claimName: aws2cloud
+          claimName: aws2cloud-pvc
       - 
         configMap:
           name: aws2cloud-cm
-        name: aws2cloud-conf
+        name: aws2cloud-conf-vol
       - 
-        name: aws2cloud-htpasswd
+        name: aws2cloud-htpasswd-vol
         secret:
-          secretName: aws2cloud
+          secretName: aws2cloud-secret
       - 
         configMap:
           name: nginx-cm
-        name: nginx-conf
+        name: nginx-conf-vol
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -134,11 +133,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      service: aws2prem-svc
+      app: aws2prem
   template:
     metadata:
       labels:
-        service: aws2prem-svc
+        app: aws2prem
     spec:
       containers:
       - 
@@ -160,40 +159,40 @@ spec:
         volumeMounts:
         - 
           mountPath: /var/log/nginx
-          name: aws2prem-logs
+          name: aws2prem-logs-vol
         - 
           mountPath: /etc/nginx/conf.d
-          name: aws2prem-conf
+          name: aws2prem-conf-vol
           readOnly: true
         - 
           mountPath: /run/nginx/etc/nginx
-          name: nginx-conf
+          name: nginx-conf-vol
           readOnly: true
         -
           mountPath: /var/cache/nginx
-          name: nginx-cache
+          name: nginx-cache-vol
         -
           mountPath: /var/run
-          name: nginx-run
+          name: nginx-run-vol
       volumes:
       -
-        name: nginx-run
+        name: nginx-run-vol
         emptyDir: {}
       -
-        name: nginx-cache
+        name: nginx-cache-vol
         emptyDir: {}
       - 
-        name: aws2prem-logs
+        name: aws2prem-logs-vol
         persistentVolumeClaim:
           claimName: aws2prem-pvc
       -
-        name: aws2prem-conf
+        name: aws2prem-conf-vol
         secret:
           secretName: aws2prem-secret
       - 
         configMap:
           name: nginx-cm
-        name: nginx-conf
+        name: nginx-conf-vol
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -203,11 +202,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      service: cloud2instance-svc
+      app: cloud2instance
   template:
     metadata:
       labels:
-        service: cloud2instance-svc
+        app: cloud2instance
     spec:
       containers:
       - 
@@ -229,40 +228,40 @@ spec:
         volumeMounts:
         - 
           mountPath: /var/log/nginx
-          name: cloud2instance-logs
+          name: cloud2instance-logs-vol
         - 
           mountPath: /etc/nginx/conf.d
-          name: cloud2instance-conf
+          name: cloud2instance-conf-vol
           readOnly: true
         - 
           mountPath: /run/nginx/etc/nginx
-          name: nginx-conf
+          name: nginx-conf-vol
           readOnly: true
         -
           mountPath: /var/cache/nginx
-          name: nginx-cache
+          name: nginx-cache-vol
         -
           mountPath: /var/run
-          name: nginx-run
+          name: nginx-run-vol
       volumes:
       -
-        name: nginx-run
+        name: nginx-run-vol
         emptyDir: {}
       -
-        name: nginx-cache
+        name: nginx-cache-vol
         emptyDir: {}
       - 
-        name: cloud2instance-logs
+        name: cloud2instance-logs-vol
         persistentVolumeClaim:
           claimName: cloud2instance-pvc
       - 
-        name: cloud2instance-conf
+        name: cloud2instance-conf-vol
         secret:
           secretName: cloud2instance-secret
       - 
         configMap:
           name: nginx-cm
-        name: nginx-conf
+        name: nginx-conf-vol
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -271,7 +270,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      service: aws2cloud-svc
+      app: aws2cloud
   ingress:
     -
       ports:
@@ -285,7 +284,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      service: aws2prem-svc
+      app: aws2prem
   ingress:
     -
       ports:
@@ -299,14 +298,14 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      service: cloud2instance-svc
+      app: cloud2instance
   ingress:
     -
       from:
         -
           podSelector:
             matchLabels:
-              service: aws2cloud-svc
+              app: aws2cloud
       ports:
         -
           port: 8080
@@ -439,7 +438,7 @@ spec:
     port: 80
     targetPort: 8080
   selector:
-    service: aws2cloud-svc
+    app: aws2cloud
 ---
 apiVersion: v1
 kind: Service
@@ -451,7 +450,7 @@ spec:
     port: 80
     targetPort: 8080
   selector:
-    service: aws2prem-svc
+    app: aws2prem
 ---
 apiVersion: v1
 kind: Service
@@ -463,5 +462,5 @@ spec:
     port: 80
     targetPort: 8080
   selector:
-    service: cloud2instance-svc
+    app: cloud2instance
 ---
