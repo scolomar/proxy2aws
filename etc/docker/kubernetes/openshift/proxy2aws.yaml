@@ -15,7 +15,7 @@ data:
       location /cloud/ {
         auth_basic "AWS to Cloud";
         auth_basic_user_file /etc/nginx/htpasswd/aws2cloud.htpasswd;
-        proxy_pass http://cloud2instance;
+        proxy_pass http://cloud2instance:8080;
       }
       server_name localhost;
     }
@@ -64,7 +64,7 @@ spec:
     spec:
       containers:
       - 
-        image: secobau/nginx:5.4@sha256:9b2aa5efca39514d650fd8391eed82770303597dd2acc2c678a2bbf49052fae4
+        image: secobau/nginx:5.4
         livenessProbe:
           httpGet:
             path: /
@@ -141,7 +141,7 @@ spec:
     spec:
       containers:
       - 
-        image: secobau/nginx:5.4@sha256:9b2aa5efca39514d650fd8391eed82770303597dd2acc2c678a2bbf49052fae4
+        image: secobau/nginx:5.4
         livenessProbe:
           httpGet:
             path: /
@@ -210,7 +210,7 @@ spec:
     spec:
       containers:
       - 
-        image: secobau/nginx:5.4@sha256:9b2aa5efca39514d650fd8391eed82770303597dd2acc2c678a2bbf49052fae4
+        image: secobau/nginx:5.4
         livenessProbe:
           httpGet:
             path: /
@@ -435,7 +435,7 @@ metadata:
 spec:
   ports:
   - 
-    port: 80
+    port: 8080
     targetPort: 8080
   selector:
     app: aws2cloud
@@ -447,7 +447,7 @@ metadata:
 spec:
   ports:
   -
-    port: 80
+    port: 8080
     targetPort: 8080
   selector:
     app: aws2prem
@@ -459,7 +459,7 @@ metadata:
 spec:
   ports:
   - 
-    port: 80
+    port: 8080
     targetPort: 8080
   selector:
     app: cloud2instance
