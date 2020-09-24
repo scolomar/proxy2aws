@@ -1,0 +1,88 @@
+#########################################################################
+#      Copyright (C) 2020        Sebastian Francisco Colomar Bauza      #
+#      SPDX-License-Identifier:  GPL-2.0-only                           #
+#########################################################################
+
+configs:
+  aws2cloud:
+    file: /run/configs/etc/nginx/conf.d/aws2cloud.conf
+
+networks:
+  cloud2instance:
+    internal: true
+    
+secrets:
+  aws2cloud:
+    file: /run/secrets/etc/nginx/aws2cloud.htpasswd
+  aws2prem:
+    file: /run/secrets/etc/nginx/conf.d/aws2prem.conf
+  cloud2instance:
+    file: /run/secrets/etc/nginx/conf.d/cloud2instance.conf
+
+services:
+  aws2cloud:
+    configs:
+    -
+      mode: 0440
+      source: aws2cloud
+      target: /etc/nginx/conf.d/aws2cloud.conf
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: secobau/nginx:1.2
+    networks:
+    - cloud2instance
+    ports:
+    - "30001:80"
+    secrets:
+    -
+      gid: '101'
+      mode: 0440
+      source: aws2cloud
+      target: etc/nginx/aws2cloud.htpasswd
+      uid: '101'
+    volumes:
+    - aws2cloud:/var/log/nginx
+  aws2prem:
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: secobau/nginx:1.2
+    ports:
+    - "30002:80"
+    secrets:
+    - 
+      mode: 0440
+      source: aws2prem
+      target: etc/nginx/conf.d/aws2prem.conf
+    volumes:
+    - aws2prem:/var/log/nginx
+  cloud2instance:
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: secobau/nginx:1.2
+    networks:
+    - cloud2instance
+    secrets:
+    -
+      mode: 0440
+      source: cloud2instance
+      target: etc/nginx/conf.d/cloud2instance.conf
+    volumes:
+    - cloud2instance:/var/log/nginx
+
+version: '3.8'
+
+volumes:
+  aws2cloud:
+  aws2prem:
+  cloud2instance:
+  
+  
