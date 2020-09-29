@@ -33,7 +33,8 @@ jobs:
       id: test
       run: |
         set -x
-        compose=etc/docker/swarm/docker-compose.yaml
+        project=proxy2aws
+        compose=etc/docker/swarm/${project}.yaml
         script=.github/bin/check-service.sh
         sudo cp -rv run/* /run
         sed -i s/worker/manager/ ${compose}
