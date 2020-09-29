@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - 
-        image: secobau/nginx:5.4
+        image: secobau/nginx:6.1
         livenessProbe:
           httpGet:
             path: /
@@ -36,9 +36,6 @@ spec:
           initialDelaySeconds: 1
         volumeMounts:
         - 
-          mountPath: /var/log/nginx
-          name: aws2cloud-logs-vol
-        - 
           mountPath: /etc/nginx/conf.d
           name: aws2cloud-conf-vol
           readOnly: true
@@ -53,32 +50,35 @@ spec:
         -
           mountPath: /var/cache/nginx
           name: nginx-cache-vol
+        - 
+          mountPath: /var/log/nginx
+          name: aws2cloud-logs-vol
         -
           mountPath: /var/run
           name: nginx-run-vol
       volumes:
-      -
-        name: nginx-run-vol
-        emptyDir: {}
-      -
-        name: nginx-cache-vol
-        emptyDir: {}
-      - 
-        name: aws2cloud-logs-vol
-        persistentVolumeClaim:
-          claimName: aws2cloud-pvc
-      - 
-        configMap:
-          name: aws2cloud.conf
-        name: aws2cloud-conf-vol
       - 
         name: aws2cloud-htpasswd-vol
         secret:
           secretName: aws2cloud.htpasswd
       - 
         configMap:
+          name: aws2cloud.conf
+        name: aws2cloud-conf-vol
+      - 
+        configMap:
           name: nginx.conf
         name: nginx-conf-vol
+      - 
+        name: aws2cloud-logs-vol
+        persistentVolumeClaim:
+          claimName: aws2cloud-pvc
+      -
+        name: nginx-cache-vol
+        emptyDir: {}
+      -
+        name: nginx-run-vol
+        emptyDir: {}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -113,9 +113,6 @@ spec:
           initialDelaySeconds: 1
         volumeMounts:
         - 
-          mountPath: /var/log/nginx
-          name: aws2prem-logs-vol
-        - 
           mountPath: /etc/nginx/conf.d
           name: aws2prem-conf-vol
           readOnly: true
@@ -126,28 +123,31 @@ spec:
         -
           mountPath: /var/cache/nginx
           name: nginx-cache-vol
+        - 
+          mountPath: /var/log/nginx
+          name: aws2prem-logs-vol
         -
           mountPath: /var/run
           name: nginx-run-vol
       volumes:
-      -
-        name: nginx-run-vol
-        emptyDir: {}
-      -
-        name: nginx-cache-vol
-        emptyDir: {}
       - 
-        name: aws2prem-logs-vol
-        persistentVolumeClaim:
-          claimName: aws2prem-pvc
+        configMap:
+          name: nginx.conf
+        name: nginx-conf-vol
       -
         name: aws2prem-conf-vol
         secret:
           secretName: aws2prem.conf
       - 
-        configMap:
-          name: nginx.conf
-        name: nginx-conf-vol
+        name: aws2prem-logs-vol
+        persistentVolumeClaim:
+          claimName: aws2prem-pvc
+      -
+        name: nginx-cache-vol
+        emptyDir: {}
+      -
+        name: nginx-run-vol
+        emptyDir: {}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -186,15 +186,15 @@ spec:
           name: cloud2instance-conf-vol
           readOnly: true
         - 
-          mountPath: /var/log/nginx
-          name: cloud2instance-logs-vol
-        - 
           mountPath: /run/nginx/etc/nginx
           name: nginx-conf-vol
           readOnly: true
         -
           mountPath: /var/cache/nginx
           name: nginx-cache-vol
+        - 
+          mountPath: /var/log/nginx
+          name: cloud2instance-logs-vol
         -
           mountPath: /var/run
           name: nginx-run-vol
@@ -357,6 +357,7 @@ spec:
     port: 8080
   selector:
     app: aws2cloud
+  type: NodePort
 ---
 apiVersion: v1
 kind: Service
@@ -369,6 +370,7 @@ spec:
     port: 8080
   selector:
     app: aws2prem
+  type: NodePort
 ---
 apiVersion: v1
 kind: Service
