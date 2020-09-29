@@ -1,0 +1,383 @@
+#########################################################################
+#      Copyright (C) 2020        Sebastian Francisco Colomar Bauza      #
+#      SPDX-License-Identifier:  GPL-2.0-only                           #
+#########################################################################
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws2cloud-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aws2cloud
+  template:
+    metadata:
+      labels:
+        app: aws2cloud
+    spec:
+      containers:
+      - 
+        image: secobau/nginx:5.4
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 10
+        name: aws2cloud-container
+        ports:
+          -
+            containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 1
+        volumeMounts:
+        - 
+          mountPath: /var/log/nginx
+          name: aws2cloud-logs-vol
+        - 
+          mountPath: /etc/nginx/conf.d
+          name: aws2cloud-conf-vol
+          readOnly: true
+        - 
+          mountPath: /etc/nginx/htpasswd
+          name: aws2cloud-htpasswd-vol
+          readOnly: true
+        - 
+          mountPath: /run/nginx/etc/nginx
+          name: nginx-conf-vol
+          readOnly: true
+        -
+          mountPath: /var/cache/nginx
+          name: nginx-cache-vol
+        -
+          mountPath: /var/run
+          name: nginx-run-vol
+      volumes:
+      -
+        name: nginx-run-vol
+        emptyDir: {}
+      -
+        name: nginx-cache-vol
+        emptyDir: {}
+      - 
+        name: aws2cloud-logs-vol
+        persistentVolumeClaim:
+          claimName: aws2cloud-pvc
+      - 
+        configMap:
+          name: aws2cloud.conf
+        name: aws2cloud-conf-vol
+      - 
+        name: aws2cloud-htpasswd-vol
+        secret:
+          secretName: aws2cloud.htpasswd
+      - 
+        configMap:
+          name: nginx.conf
+        name: nginx-conf-vol
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws2prem-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aws2prem
+  template:
+    metadata:
+      labels:
+        app: aws2prem
+    spec:
+      containers:
+      - 
+        image: secobau/nginx:5.4
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 10
+        name: aws2prem-container
+        ports:
+          -
+            containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 1
+        volumeMounts:
+        - 
+          mountPath: /var/log/nginx
+          name: aws2prem-logs-vol
+        - 
+          mountPath: /etc/nginx/conf.d
+          name: aws2prem-conf-vol
+          readOnly: true
+        - 
+          mountPath: /run/nginx/etc/nginx
+          name: nginx-conf-vol
+          readOnly: true
+        -
+          mountPath: /var/cache/nginx
+          name: nginx-cache-vol
+        -
+          mountPath: /var/run
+          name: nginx-run-vol
+      volumes:
+      -
+        name: nginx-run-vol
+        emptyDir: {}
+      -
+        name: nginx-cache-vol
+        emptyDir: {}
+      - 
+        name: aws2prem-logs-vol
+        persistentVolumeClaim:
+          claimName: aws2prem-pvc
+      -
+        name: aws2prem-conf-vol
+        secret:
+          secretName: aws2prem.conf
+      - 
+        configMap:
+          name: nginx.conf
+        name: nginx-conf-vol
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud2instance-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloud2instance
+  template:
+    metadata:
+      labels:
+        app: cloud2instance
+    spec:
+      containers:
+      - 
+        image: secobau/nginx:5.4
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 10
+        name: cloud2instance-container
+        ports:
+          -
+            containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 1
+        volumeMounts:
+        - 
+          mountPath: /etc/nginx/conf.d
+          name: cloud2instance-conf-vol
+          readOnly: true
+        - 
+          mountPath: /var/log/nginx
+          name: cloud2instance-logs-vol
+        - 
+          mountPath: /run/nginx/etc/nginx
+          name: nginx-conf-vol
+          readOnly: true
+        -
+          mountPath: /var/cache/nginx
+          name: nginx-cache-vol
+        -
+          mountPath: /var/run
+          name: nginx-run-vol
+      volumes:
+      - 
+        configMap:
+          name: nginx.conf
+        name: nginx-conf-vol
+      - 
+        name: cloud2instance-conf-vol
+        secret:
+          secretName: cloud2instance.conf
+      - 
+        name: cloud2instance-logs-vol
+        persistentVolumeClaim:
+          claimName: cloud2instance-pvc
+      -
+        name: nginx-cache-vol
+        emptyDir: {}
+      -
+        name: nginx-run-vol
+        emptyDir: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: aws2cloud-netpol
+spec:
+  podSelector:
+    matchLabels:
+      app: aws2cloud
+  ingress:
+    -
+      ports:
+        -
+          port: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: aws2prem-netpol
+spec:
+  podSelector:
+    matchLabels:
+      app: aws2prem
+  ingress:
+    -
+      ports:
+        -
+          port: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: cloud2instance-netpol
+spec:
+  podSelector:
+    matchLabels:
+      app: cloud2instance
+  ingress:
+    -
+      from:
+        -
+          podSelector:
+            matchLabels:
+              app: aws2cloud
+      ports:
+        -
+          port: 8080
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: aws2cloud-pv
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/log/aws2cloud"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: aws2prem-pv
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/log/aws2prem"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: cloud2instance-pv
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/log/cloud2instance"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: aws2cloud-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: manual
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: aws2prem-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: manual
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: cloud2instance-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: manual
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aws2cloud
+spec:
+  ports:
+  - 
+    nodePort: 30001
+    port: 8080
+  selector:
+    app: aws2cloud
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aws2prem
+spec:
+  ports:
+  -
+    nodePort: 30002
+    port: 8080
+  selector:
+    app: aws2prem
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloud2instance
+spec:
+  ports:
+  - 
+    port: 8080
+  selector:
+    app: cloud2instance
+---
