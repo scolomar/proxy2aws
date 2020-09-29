@@ -1,3 +1,5 @@
+![CI](https://github.com/secobau/proxy2aws/workflows/CI/badge.svg)
+
 This project consists of an NginX Reverse Proxy that will forward traffic from one service to another and vice-versa.  
 The connection between the proxy and the services is done through HTTPS with Basic Authentication.
 
