@@ -96,7 +96,7 @@ spec:
     spec:
       containers:
       - 
-        image: secobau/nginx:5.4
+        image: secobau/nginx:6.2
         livenessProbe:
           httpGet:
             path: /
@@ -165,7 +165,7 @@ spec:
     spec:
       containers:
       - 
-        image: secobau/nginx:5.4
+        image: secobau/nginx:6.2
         livenessProbe:
           httpGet:
             path: /
